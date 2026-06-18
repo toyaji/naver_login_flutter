@@ -1,8 +1,8 @@
-# flutter_naver_login_spm
-[![Build Status](https://img.shields.io/badge/pub-v2.1.1-success.svg)](https://pub.dev/packages/flutter_naver_login)
+# naver_login_flutter
+[![Build Status](https://img.shields.io/badge/pub-v2.1.1-success.svg)](https://pub.dev/packages/naver_login_flutter)
 [![Build Status](https://img.shields.io/badge/naverAosSDK-v5.10.0-success.svg)](https://github.com/naver/naveridlogin-sdk-android)
 [![Build Status](https://img.shields.io/badge/naverIosSDK-v5.0.0-success.svg)](https://github.com/naver/naveridlogin-sdk-ios-swift)
-[![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://travis-ci.org/roughike/flutter_naver_login)
+[![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://github.com/toyaji/naver_login_flutter)
 
 A Flutter plugin for using the native Naver Login SDKs on Android and iOS.
 
@@ -35,7 +35,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_naver_login_spm: ^2.1.0
+  naver_login_flutter: ^2.1.0
 ```
 
 ### 2. Platform Setup

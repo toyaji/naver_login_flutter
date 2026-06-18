@@ -1,4 +1,4 @@
-package com.example.flutter_naver_login
+package com.example.naver_login_flutter
 
 import android.app.Activity
 import android.content.Context
@@ -94,7 +94,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_naver_login")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "naver_login_flutter")
         channel.setMethodCallHandler(this)
 
         NaverIdLoginSDK.showDevelopersLog(true)

@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint flutter_naver_login.podspec` to validate before publishing.
+# Run `pod lib lint naver_login_flutter.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'flutter_naver_login'
+  s.name             = 'naver_login_flutter'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
@@ -13,7 +13,7 @@ A new Flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'flutter_naver_login/Sources/flutter_naver_login/**/*'
+  s.source_files = 'naver_login_flutter/Sources/naver_login_flutter/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '13.0'
 
@@ -29,5 +29,5 @@ A new Flutter plugin project.
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
   # plugin's privacy impact, and then uncomment this line. For more information,
   # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'flutter_naver_login_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+  # s.resource_bundles = {'naver_login_flutter_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

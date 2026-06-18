@@ -1,4 +1,4 @@
-/// flutter_naver_login_method_channel.dart
+/// naver_login_flutter_method_channel.dart
 ///
 /// 네이버 로그인의 플랫폼 특화 구현을 제공하는 파일입니다.
 /// MethodChannel을 통해 네이티브 코드와 통신하는 구현체를 정의합니다.
@@ -6,18 +6,18 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
-import 'package:flutter_naver_login/interface/types/naver_token.dart';
+import 'package:naver_login_flutter/interface/types/naver_account_result.dart';
+import 'package:naver_login_flutter/interface/types/naver_token.dart';
 
-import 'flutter_naver_login_platform_interface.dart';
-import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
-import 'package:flutter_naver_login/interface/types/naver_login_status.dart';
+import 'naver_login_flutter_platform_interface.dart';
+import 'package:naver_login_flutter/interface/types/naver_login_result.dart';
+import 'package:naver_login_flutter/interface/types/naver_login_status.dart';
 
 /// [FlutterNaverLoginPlatform]을 구현하는 클래스로, MethodChannel을 사용하여 네이티브 코드와 통신합니다.
 class MethodChannelFlutterNaverLogin extends FlutterNaverLoginPlatform {
   /// 네이티브 플랫폼과 통신하기 위한 MethodChannel
   @visibleForTesting
-  final methodChannel = const MethodChannel('flutter_naver_login');
+  final methodChannel = const MethodChannel('naver_login_flutter');
 
   /// 네이버 로그인을 수행하는 메서드
   @override

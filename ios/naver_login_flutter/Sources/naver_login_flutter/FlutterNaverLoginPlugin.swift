@@ -90,7 +90,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
         NidOAuth.shared.setLoginBehavior(.appPreferredWithInAppBrowserFallback)
         
         let channel = FlutterMethodChannel(
-            name: "flutter_naver_login",
+            name: "naver_login_flutter",
             binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(instance, channel: channel)
     }

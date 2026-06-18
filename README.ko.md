@@ -1,8 +1,8 @@
-# flutter_naver_login
-[![Build Status](https://img.shields.io/badge/pub-v2.1.1-success.svg)](https://pub.dev/packages/flutter_naver_login)
+# naver_login_flutter
+[![Build Status](https://img.shields.io/badge/pub-v2.1.1-success.svg)](https://pub.dev/packages/naver_login_flutter)
 [![Build Status](https://img.shields.io/badge/naverAosSDK-v5.10.0-success.svg)](https://github.com/naver/naveridlogin-sdk-android)
 [![Build Status](https://img.shields.io/badge/naverIosSDK-v5.0.0-success.svg)](https://github.com/naver/naveridlogin-sdk-ios-swift)
-[![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://travis-ci.org/roughike/flutter_naver_login)
+[![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://github.com/toyaji/naver_login_flutter)
 
 
 Android와 iOS에서 네이버 로그인 SDK를 사용하기 위한 Flutter 플러그인입니다.
@@ -17,7 +17,7 @@ Android와 iOS에서 네이버 로그인 SDK를 사용하기 위한 Flutter 플�
 
 ```yaml
 dependencies:
-  flutter_naver_login: ^2.1.1
+  naver_login_flutter: ^2.1.1
 ```
 
 ### 2. 플랫폼 설정

@@ -1,6 +1,6 @@
 # ONBOARDING.md (개발자 및 AI 공용 온보딩 가이드)
 
-이 문서는 `flutter_naver_login_spm` 패키지의 개발 및 기여를 시작할 때 로컬 환경을 구성하고 연동을 테스트하는 방법을 안내합니다. 
+이 문서는 `naver_login_flutter` 패키지의 개발 및 기여를 시작할 때 로컬 환경을 구성하고 연동을 테스트하는 방법을 안내합니다. 
 
 > [!NOTE]  
 > 이 문서는 로컬 환경 설치 및 기본 설정을 돕기 위한 기술 가이드입니다. 코드 수정 방법, 테스트 작성 기준, PR(Pull Request) 리뷰 프로세스 및 CI/CD 워크플로우 등 기여 전반에 관한 상세한 규칙은 **[CONTRIBUTING.md](CONTRIBUTING.md)**를 참조해 주십시오.

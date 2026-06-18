@@ -1,4 +1,4 @@
-package com.example.flutter_naver_login_example
+package com.example.naver_login_flutter_example
 
 import io.flutter.embedding.android.FlutterActivity
 

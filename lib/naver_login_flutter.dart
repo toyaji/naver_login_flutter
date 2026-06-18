@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
-import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
-import 'package:flutter_naver_login/interface/types/naver_token.dart';
-import 'flutter_naver_login_platform_interface.dart';
+import 'package:naver_login_flutter/interface/types/naver_account_result.dart';
+import 'package:naver_login_flutter/interface/types/naver_login_result.dart';
+import 'package:naver_login_flutter/interface/types/naver_token.dart';
+import 'naver_login_flutter_platform_interface.dart';
 
 /// 플러그인에서 사용할 메서드를 나타내는 열거형
 enum FlutterPluginMethod {
@@ -27,7 +27,7 @@ enum FlutterPluginMethod {
 /// 이 클래스는 네이버 로그인 SDK와의 인터페이스를 제공합니다.
 class FlutterNaverLogin {
   /// 네이티브 플랫폼과 통신하기 위한 메서드 채널
-  static const MethodChannel channel = MethodChannel('flutter_naver_login');
+  static const MethodChannel channel = MethodChannel('naver_login_flutter');
 
   /// 네이버 로그인을 수행합니다.
   ///

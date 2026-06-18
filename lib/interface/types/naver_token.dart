@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_naver_login/utils/clock.dart';
+import 'package:naver_login_flutter/utils/clock.dart';
 
 /// naver_access_token.dart
 ///

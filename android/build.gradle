@@ -1,4 +1,4 @@
-group = "com.example.flutter_naver_login"
+group = "com.example.naver_login_flutter"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -25,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "com.example.flutter_naver_login"
+    namespace = "com.example.naver_login_flutter"
 
     compileSdk = 35
 

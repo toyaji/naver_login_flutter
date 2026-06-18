@@ -28,6 +28,6 @@ migrate_working_dir/
 .dart_tool/
 build/
 
-flutter_naver_login.iml
+naver_login_flutter.iml
 pubspec.lock
 .vscode

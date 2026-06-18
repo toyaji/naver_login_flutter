@@ -1,4 +1,4 @@
-package com.example.flutter_naver_login
+package com.example.naver_login_flutter
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

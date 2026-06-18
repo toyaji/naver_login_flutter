@@ -1,6 +1,6 @@
 # SPM_INTEGRATION_STANDARDS.md (SPM 연동 규격 및 Xcode 빌드 최적화)
 
-이 문서는 `flutter_naver_login_spm` 패키지에서 iOS Swift Package Manager(SPM)를 공식 연동하고 Xcode 빌드 최적화를 유지하기 위한 설계 아키텍처 및 구현 표준을 정의합니다.
+이 문서는 `naver_login_flutter` 패키지에서 iOS Swift Package Manager(SPM)를 공식 연동하고 Xcode 빌드 최적화를 유지하기 위한 설계 아키텍처 및 구현 표준을 정의합니다.
 
 ---
 
@@ -15,7 +15,7 @@
                      |
                      v
 +------------------------------------------+
-|        flutter_naver_login_spm           |
+|        naver_login_flutter               |
 | (Flutter Plugin Root - Package.swift)    |
 +------------------------------------------+
       |                               |
@@ -38,33 +38,35 @@
 import PackageDescription
 
 let package = Package(
-    name: "flutter_naver_login_spm",
+    name: "naver_login_flutter",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "flutter-naver-login-spm",
-            targets: ["flutter_naver_login_spm"]
+            name: "naver-login-flutter",
+            targets: ["naver_login_flutter"]
         )
     ],
     dependencies: [
         // Naver SDK SPM 배포처 지정
-        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-spm.git", from: "2.1.0")
+        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-swift.git", from: "5.0.0"),
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
     ],
     targets: [
         .target(
-            name: "flutter_naver_login_spm",
+            name: "naver_login_flutter",
             dependencies: [
-                .product(name: "NaverThirdPartyLogin", package: "naveridlogin-sdk-ios-spm")
+                .product(name: "NidThirdPartyLogin", package: "naveridlogin-sdk-ios-swift"),
+                .product(name: "FlutterFramework", package: "FlutterFramework")
             ],
-            path: "ios/Classes"
+            path: "Sources/naver_login_flutter"
         )
     ]
 )
 ```
 
-### ⚠️ SPM 적용 시 `flutter_naver_login.podspec` 수정 지침
+### ⚠️ SPM 적용 시 `naver_login_flutter.podspec` 수정 지침
 SPM을 사용할 때 CocoaPods Podspec이 중복으로 라이브러리를 링크하면 **Linker Duplicate Symbol** 오류 또는 빌드 캐시 붕괴가 발생할 수 있습니다.
 - **의존성 제외**: `.podspec` 내부에 `s.dependency 'NaverThirdPartyLogin'` 등의 구문을 완전히 삭제해야 합니다.
 - Podspec은 Flutter가 SPM을 활성화하지 않았을 경우의 폴백(Fallback) 목적으로만 제공되거나, SPM이 활성화된 환경에서는 빈 프레임워크 타겟 형태로 구성되어 SPM 타겟 컴파일을 방해하지 않아야 합니다.

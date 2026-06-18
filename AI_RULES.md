@@ -1,6 +1,6 @@
 # AI_RULES.md (AI Agent Guidelines)
 
-이 규칙은 `flutter_naver_login_spm` 패키지의 개발, 수정, 버그 수정 및 유지보수에 참여하는 모든 AI 에이전트(Gemini, Claude, GPT 등)가 반드시 준수해야 하는 행동 제약사항 및 프로세스입니다.
+이 규칙은 `naver_login_flutter` 패키지의 개발, 수정, 버그 수정 및 유지보수에 참여하는 모든 AI 에이전트(Gemini, Claude, GPT 등)가 반드시 준수해야 하는 행동 제약사항 및 프로세스입니다.
 
 ---
 

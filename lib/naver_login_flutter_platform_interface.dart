@@ -1,4 +1,4 @@
-/// flutter_naver_login_platform_interface.dart
+/// naver_login_flutter_platform_interface.dart
 ///
 /// 네이버 로그인 SDK의 플랫폼 인터페이스를 정의하는 파일입니다.
 /// 이 파일은 플랫폼별 구현의 기본 인터페이스를 제공합니다.
@@ -19,11 +19,11 @@
 /// ```
 library;
 
-import 'package:flutter_naver_login/flutter_naver_login_method_channel.dart';
-import 'package:flutter_naver_login/interface/types/naver_token.dart';
-import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
+import 'package:naver_login_flutter/naver_login_flutter_method_channel.dart';
+import 'package:naver_login_flutter/interface/types/naver_token.dart';
+import 'package:naver_login_flutter/interface/types/naver_account_result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
+import 'package:naver_login_flutter/interface/types/naver_login_result.dart';
 
 /// 네이버 로그인 기능을 제공하는 주요 클래스
 ///

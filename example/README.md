@@ -1,6 +1,6 @@
-# flutter_naver_login_example
+# naver_login_flutter_example
 
-Demonstrates how to use the flutter_naver_login plugin.
+Demonstrates how to use the naver_login_flutter plugin.
 
 ## Getting Started
 

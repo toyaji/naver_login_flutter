@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:args/args.dart';
 import 'src/android_configurator.dart';
@@ -26,7 +25,9 @@ void main(List<String> arguments) async {
     return;
   }
 
-  stdout.writeln('🚀 Starting naver_login_flutter automatic configuration...\n');
+  stdout.writeln(
+    '🚀 Starting naver_login_flutter automatic configuration...\n',
+  );
 
   String? appName = argResults['app-name'];
   String? clientId = argResults['client-id'];

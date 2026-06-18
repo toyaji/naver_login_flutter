@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:xml/xml.dart';
@@ -148,7 +147,9 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
             'Naver configuration already exists in AndroidManifest.xml. Do you want to overwrite it?',
           );
           if (!overwrite) {
-            stdout.writeln('  [SKIP] Left existing AndroidManifest.xml intact.');
+            stdout.writeln(
+              '  [SKIP] Left existing AndroidManifest.xml intact.',
+            );
             return success;
           }
         }
@@ -196,7 +197,9 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
       manifestFile.writeAsStringSync(document.toXmlString(pretty: false));
       stdout.writeln('  [OK] Updated android/app/src/main/AndroidManifest.xml');
     } catch (e) {
-      stdout.writeln('  [ERROR] Failed to parse AndroidManifest.xml safely: \$e');
+      stdout.writeln(
+        '  [ERROR] Failed to parse AndroidManifest.xml safely: \$e',
+      );
       success = false;
     }
   } else {

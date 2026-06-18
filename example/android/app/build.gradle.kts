@@ -6,7 +6,7 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 
-val naverClientSecret = localProperties.getProperty("naver.client_secret") ?: ""
+val naverClientSecret = localProperties.getProperty("naver.client_secret") ?: "dummy_secret"
 
 plugins {
     id("com.android.application")

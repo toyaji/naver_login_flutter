@@ -19,7 +19,6 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.x" # You can adjust this to your minimum supported version
           channel: "stable"
 
       - name: Install dependencies
@@ -55,15 +54,17 @@ jobs:
           channel: "stable"
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          cd example && flutter pub get
 
       - name: Build Android Example
-        working-directory: example/android
-        run: ./gradlew assembleRelease
+        working-directory: example
+        run: flutter build apk --release
 
   ios_spm_build:
     name: iOS SPM Build Check
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -74,7 +75,9 @@ jobs:
           channel: "stable"
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          cd example && flutter pub get
 
       - name: Strip CocoaPods and Build SPM
         working-directory: example
@@ -84,3 +87,34 @@ jobs:
           rm -rf Podfile.lock Pods/
           cd ..
           flutter build ios --no-codesign
+
+  android_integration_test:
+    name: Android Integration Test
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          cd example && flutter pub get
+
+      - name: Run Integration Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: arm64-v8a
+          script: cd example && flutter test integration_test

@@ -2,10 +2,7 @@ package com.example.naver_login_flutter
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
-
 import com.navercorp.nid.NidOAuth
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.util.NidOAuthCallback
@@ -252,20 +249,6 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
         pendingResult = result
 
-        // 기존 토큰이 있다면 먼저 삭제 (user_cancel 문제 방지)
-        try {
-            if (NidOAuth.getAccessToken() != null) {
-                println("Existing token found, logging out first")
-                NidOAuth.logout(object : NidOAuthCallback {
-                    override fun onSuccess() {}
-                    override fun onFailure(errorCode: String, errorDesc: String) {}
-                })
-            }
-        } catch (e: Exception) {
-            // 토큰 체크 실패는 무시하고 계속 진행
-            println("Token check failed: ${e.message}")
-        }
-
         val mOAuthLoginHandler = object : NidOAuthCallback {
             override fun onSuccess() {
                 mainScope.launch {
@@ -275,7 +258,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
             override fun onFailure(errorCode: String, errorDesc: String) {
                 // 사용자 취소인지 확인
-                if (errorCode == "user_cancel" || errorDesc.contains("cancel")) {
+                if (errorCode == "user_cancel" || errorDesc.contains("cancel", ignoreCase = true)) {
                     sendResult(NaverLoginStatus.LOGGED_OUT, null, null, result)
                 } else {
                     result.success(object : HashMap<String, String>() {
@@ -290,11 +273,30 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
             }
         }
 
-        activity?.let {
-            NidOAuth.requestLogin(it, mOAuthLoginHandler)
-        } ?: run {
-            sendError("Activity is null", result)
-            pendingResult = null
+        val performLogin = {
+            activity?.let {
+                NidOAuth.requestLogin(it, mOAuthLoginHandler)
+            } ?: run {
+                sendError("Activity is null", result)
+                pendingResult = null
+            }
+        }
+
+        // 기존 토큰이 있다면 먼저 삭제 (user_cancel 문제 방지)
+        try {
+            if (NidOAuth.getAccessToken() != null) {
+                println("Existing token found, logging out first")
+                NidOAuth.logout(object : NidOAuthCallback {
+                    override fun onSuccess() { performLogin() }
+                    override fun onFailure(errorCode: String, errorDesc: String) { performLogin() }
+                })
+            } else {
+                performLogin()
+            }
+        } catch (e: Exception) {
+            // 토큰 체크 실패는 무시하고 계속 진행
+            println("Token check failed: ${e.message}")
+            performLogin()
         }
     }
 

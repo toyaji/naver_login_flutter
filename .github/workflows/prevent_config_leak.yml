@@ -1,0 +1,34 @@
+name: Prevent Config Leak
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-example-config:
+    name: Check Example Config Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            example/android/app/src/main/AndroidManifest.xml
+            example/ios/Runner/Info.plist
+
+      - name: Verify no unauthorized changes
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "::error::You have modified the example configuration files. Please revert these changes to avoid leaking your personal Naver API keys."
+          echo "Files modified: \${{ steps.changed-files.outputs.all_changed_files }}"
+          exit 1

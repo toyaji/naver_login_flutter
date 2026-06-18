@@ -24,4 +24,4 @@ enum FlutterPluginMethod: String {
     init(methodName: String) {
         self = FlutterPluginMethod(rawValue: methodName) ?? .unknown
     }
-} 
+}

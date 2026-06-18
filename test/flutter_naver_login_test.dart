@@ -7,10 +7,11 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:flutter_naver_login/interface/types/naver_login_status.dart';
 import 'package:flutter_naver_login/flutter_naver_login_method_channel.dart';
 
+const String _fixedExpireTime = '2026-06-18T14:50:15.608932';
+
 class MockFlutterNaverLoginPlatform
     with MockPlatformInterfaceMixin
     implements FlutterNaverLoginPlatform {
-  @override
   Future<void> initSdk({
     required String clientId,
     required String clientName,
@@ -31,7 +32,7 @@ class MockFlutterNaverLoginPlatform
       accessToken: NaverToken(
         accessToken: 'mockAccessToken',
         refreshToken: 'mockRefreshToken',
-        expiresAt: DateTime.now().add(Duration(days: 1)).toIso8601String(),
+        expiresAt: _fixedExpireTime,
         tokenType: 'bearer',
       ),
       account: NaverAccountResult(nickname: 'mockUser'),
@@ -58,7 +59,7 @@ class MockFlutterNaverLoginPlatform
     return NaverToken(
       accessToken: 'mockAccessToken',
       refreshToken: 'mockRefreshToken',
-      expiresAt: DateTime.now().add(Duration(days: 1)).toIso8601String(),
+      expiresAt: _fixedExpireTime,
       tokenType: 'bearer',
     );
   }
@@ -68,7 +69,7 @@ class MockFlutterNaverLoginPlatform
     return NaverToken(
       accessToken: 'newMockAccessToken',
       refreshToken: 'newMockRefreshToken',
-      expiresAt: DateTime.now().add(Duration(days: 1)).toIso8601String(),
+      expiresAt: _fixedExpireTime,
       tokenType: 'bearer',
     );
   }
@@ -102,7 +103,7 @@ void main() {
     expect(result.refreshToken, 'mockRefreshToken');
     expect(
       result.expiresAt,
-      DateTime.now().add(Duration(days: 1)).toIso8601String(),
+      _fixedExpireTime,
     );
     expect(result.tokenType, 'bearer');
   });

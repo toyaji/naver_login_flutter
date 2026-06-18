@@ -8,4 +8,4 @@ enum LoginState {
     case error(String)
     /// 로그인이 취소된 상태
     case cancelled
-} 
+}

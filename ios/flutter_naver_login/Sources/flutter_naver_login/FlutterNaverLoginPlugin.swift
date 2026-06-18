@@ -79,7 +79,12 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
         }
         
         // SDK 초기화
-        NidOAuth.shared.initialize()
+        NidOAuth.shared.initialize(
+            appName: appName,
+            clientId: clientId,
+            clientSecret: clientSecret,
+            urlScheme: urlScheme
+        )
         
         // 기본 로그인 동작 설정 (네이버 앱이 설치된 경우 네이버 앱으로 인증, 네이버 앱이 설치되어있지 않은 경우 SafariViewController를 실행해 인증하는 방식)
         NidOAuth.shared.setLoginBehavior(.appPreferredWithInAppBrowserFallback)
@@ -143,7 +148,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
 
         // 로그인 동작 설정
         if let behavior = args["loginBehavior"] as? String {
-            switch behavior.lowercased() {
+            switch behavior {
             case "inAppBrowser":
                 NidOAuth.shared.setLoginBehavior(.inAppBrowser)
             case "app":
@@ -244,12 +249,14 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
     }
 
     private func handleRefreshToken() {
-        guard let refreshToken = NidOAuth.shared.refreshToken?.tokenString else {
+        guard NidOAuth.shared.refreshToken != nil else {
             sendError(message: "No refresh token available")
             return
         }
 
-        // 재인증을 통해 토큰 갱신
+        // SDK는 별도의 silent refresh API를 제공하지 않습니다.
+        // reauthenticate는 재인증(UI 표시 가능) 흐름이므로,
+        // Flutter 레이어의 refreshAccessTokenWithRefreshToken 메서드와 동일하게 동작합니다.
         NidOAuth.shared.reauthenticate { [weak self] result in
             switch result {
             case .success(let loginResult):
@@ -267,7 +274,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
     }
 
     private func handleIsLoggedIn() {
-        if let accessToken = NidOAuth.shared.accessToken?.tokenString {
+        if NidOAuth.shared.accessToken?.tokenString != nil {
             sendResult(status: .loggedIn)
         } else {
             sendResult(status: .loggedOut)
@@ -275,33 +282,6 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
     }
 
     // MARK: - Helper Methods
-
-    private func verifyAndGetProfile(accessToken: String, completion: @escaping (Bool) -> Void) {
-        NidOAuth.shared.verifyAccessToken(accessToken) { [weak self] result in
-            switch result {
-            case .success(let isValid):
-                if isValid {
-                    self?.getUserProfile(accessToken: accessToken) { profileResult in
-                        switch profileResult {
-                        case .success(let profile):
-                            // 로그인 시에는 토큰과 계정 정보 모두 포함
-                            self?.sendResult(status: .loggedIn, accessToken: nil, account: profile)
-                            completion(true)
-                        case .failure(let error):
-                            self?.sendError(message: error.localizedDescription)
-                            completion(false)
-                        }
-                    }
-                } else {
-                    self?.sendError(message: "Invalid access token")
-                    completion(false)
-                }
-            case .failure(let error):
-                self?.sendError(message: error.localizedDescription)
-                completion(false)
-            }
-        }
-    }
 
     private func getUserProfile(accessToken: String, completion: @escaping (Result<[String: String], Error>) -> Void) {
         NidOAuth.shared.getUserProfile(accessToken: accessToken) { result in

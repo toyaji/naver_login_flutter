@@ -21,7 +21,7 @@ A new Flutter plugin project.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
 
   # 네이버 로그인 라이브러리
-  s.dependency 'NidThirdPartyLogin', '~> 5.0.0'
+  s.dependency 'NidThirdPartyLogin', '~> 5.1.0'
 
   s.swift_version = '5.0'
 

@@ -122,14 +122,8 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
                             NaverIdLoginSDK.initialize(context, clientId, clientSecret, clientName)
                             println("Naver Login SDK initialized successfully on plugin registration")
                         } catch (e: Exception) {
-                            try {
-                                deleteCurrentEncryptedPreferences(context)
-                                NaverIdLoginSDK.initialize(context, clientId, clientSecret, clientName)
-                                println("Naver Login SDK initialized successfully after clearing preferences")
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                println("Failed to initialize Naver Login SDK: ${e.message}")
-                            }
+                            e.printStackTrace()
+                            println("Failed to initialize Naver Login SDK: ${e.message}")
                         }
                     }
                 }
@@ -239,20 +233,11 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
         } catch (e: Exception) {
             e.printStackTrace()
-
-            try {
-                deleteCurrentEncryptedPreferences()
-                println("- try again sdk init")
-                NaverIdLoginSDK.initialize(context, clientId, clientSecret, clientName)
-                sendResult(NaverLoginStatus.LOGGED_OUT, null, null, result)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                result.error(
-                    e.javaClass.simpleName,
-                    "NaverIdLoginSDK.initialize failed. message: " + e.localizedMessage,
-                    null
-                )
-            }
+            result.error(
+                e.javaClass.simpleName,
+                "NaverIdLoginSDK.initialize failed. message: " + e.localizedMessage,
+                null
+            )
         }
     }
 
@@ -289,60 +274,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
         }
     }
 
-    private fun deleteCurrentEncryptedPreferences(applicationContext: Context) {
-        val oauthLoginPrefNamePerApp = "NaverOAuthLoginEncryptedPreferenceData"
-        val oldOauthLoginPrefName = "NaverOAuthLoginPreferenceData"
 
-        if (Build.VERSION.SDK_INT >= AndroidVer.API_24_NOUGAT) {
-            try {
-                println("- try clear old oauth login prefs")
-                applicationContext.deleteSharedPreferences(oldOauthLoginPrefName)
-            } catch (e: Exception) {
-                //
-            }
-        }
-
-        try {
-            println("- try clear shared oauth login prefs")
-            val preferences = applicationContext.getSharedPreferences(
-                oauthLoginPrefNamePerApp,
-                Context.MODE_PRIVATE
-            )
-            val edit = preferences.edit()
-            edit.clear()
-            edit.apply() // commit() 대신 apply() 사용
-        } catch (e: Exception) {
-            //
-        }
-    }
-
-    // https://github.com/naver/naveridlogin-sdk-android/pull/63/files
-    private fun deleteCurrentEncryptedPreferences() {
-        val oauthLoginPrefNamePerApp = "NaverOAuthLoginEncryptedPreferenceData"
-        val oldOauthLoginPrefName = "NaverOAuthLoginPreferenceData"
-
-        if (Build.VERSION.SDK_INT >= AndroidVer.API_24_NOUGAT) {
-            try {
-                println("- try clear old oauth login prefs")
-                context.deleteSharedPreferences(oldOauthLoginPrefName)
-            } catch (e: Exception) {
-                //
-            }
-        }
-
-        try {
-            println("- try clear shared oauth login prefs")
-            val preferences = context.getSharedPreferences(
-                oauthLoginPrefNamePerApp,
-                Context.MODE_PRIVATE
-            )
-            val edit = preferences.edit()
-            edit.clear()
-            edit.apply() // commit() 대신 apply() 사용
-        } catch (e: Exception) {
-            //
-        }
-    }
 
     private fun login(result: Result) {
         // SDK 초기화 상태 확인

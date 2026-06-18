@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-swift.git", from: "5.0.0"),
+        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-swift.git", from: "5.1.0"),
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
     ],
     targets: [

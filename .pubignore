@@ -1,2 +1,6 @@
 naver_login_flutter.iml
 pubspec.lock
+build/
+example/build/
+.dart_tool/
+.idea/

@@ -35,7 +35,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  naver_login_flutter: ^3.0.1
+  naver_login_flutter: ^3.0.2
 ```
 
 ### 2. Configure Native Projects (Recommended)
@@ -233,6 +233,17 @@ try {
 1. **Missing Configuration Crashes**
    - If the app crashes on launch or when attempting to log in, it is usually because the Naver API keys are missing from your `AndroidManifest.xml` or `build.gradle.kts`.
    - Solution: Re-run the automated tool `dart run naver_login_flutter:configure` and verify that `android/local.properties` contains your `naver.client_secret`.
+
+## 📦 Release & Publishing
+
+**For package maintainers:** When preparing a new release, update the following files to keep version information synchronized:
+
+1. `pubspec.yaml` - main version field
+2. `ios/naver_login_flutter.podspec` - iOS CocoaPods metadata
+3. `README.md` - dependency example in Installation section
+4. `CHANGELOG.md` - release notes (in Korean)
+
+For detailed release preparation checklist and validation steps, see **[AI_RULES.md](AI_RULES.md#-4-배포-체크리스트-release-preparation)** (applies to all contributors, including AI agents).
 
 ## 🤝 Contributing & AI Agent Collaboration
 

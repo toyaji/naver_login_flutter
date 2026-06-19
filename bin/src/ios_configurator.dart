@@ -118,40 +118,40 @@ Future<bool> configureIOS({
       // Append new keys
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('key'), [], [XmlText('NidClientID')]),
+        XmlElement(XmlName('key'), [], [XmlText('NidClientID')]),
       );
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('string'), [], [XmlText(clientId)]),
+        XmlElement(XmlName('string'), [], [XmlText(clientId)]),
       );
 
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('key'), [], [XmlText('NidClientSecret')]),
+        XmlElement(XmlName('key'), [], [XmlText('NidClientSecret')]),
       );
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('string'), [], [
+        XmlElement(XmlName('string'), [], [
           XmlText('\$(NAVER_CLIENT_SECRET)'),
         ]),
       );
 
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('key'), [], [XmlText('NidAppName')]),
+        XmlElement(XmlName('key'), [], [XmlText('NidAppName')]),
       );
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('string'), [], [XmlText(appName)]),
+        XmlElement(XmlName('string'), [], [XmlText(appName)]),
       );
 
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('key'), [], [XmlText('NidUrlScheme')]),
+        XmlElement(XmlName('key'), [], [XmlText('NidUrlScheme')]),
       );
       rootDict.children.add(XmlText('\n\t'));
       rootDict.children.add(
-        XmlElement(XmlName.qualified('string'), [], [XmlText(urlScheme)]),
+        XmlElement(XmlName('string'), [], [XmlText(urlScheme)]),
       );
       rootDict.children.add(XmlText('\n'));
 
@@ -168,18 +168,18 @@ Future<bool> configureIOS({
       if (queryKey == null) {
         rootDict.children.add(XmlText('\t'));
         rootDict.children.add(
-          XmlElement(XmlName.qualified('key'), [], [
+          XmlElement(XmlName('key'), [], [
             XmlText('LSApplicationQueriesSchemes'),
           ]),
         );
         rootDict.children.add(XmlText('\n\t'));
-        final arrayNode = XmlElement(XmlName.qualified('array'), [], [
+        final arrayNode = XmlElement(XmlName('array'), [], [
           XmlText('\n\t\t'),
-          XmlElement(XmlName.qualified('string'), [], [
+          XmlElement(XmlName('string'), [], [
             XmlText('naversearchapp'),
           ]),
           XmlText('\n\t\t'),
-          XmlElement(XmlName.qualified('string'), [], [
+          XmlElement(XmlName('string'), [], [
             XmlText('naversearchthirdlogin'),
           ]),
           XmlText('\n\t'),
@@ -197,7 +197,7 @@ Future<bool> configureIOS({
           if (!existingStrings.contains('naversearchapp')) {
             arraySibling.children.add(XmlText('\t\t'));
             arraySibling.children.add(
-              XmlElement(XmlName.qualified('string'), [], [
+              XmlElement(XmlName('string'), [], [
                 XmlText('naversearchapp'),
               ]),
             );
@@ -206,7 +206,7 @@ Future<bool> configureIOS({
           if (!existingStrings.contains('naversearchthirdlogin')) {
             arraySibling.children.add(XmlText('\t\t'));
             arraySibling.children.add(
-              XmlElement(XmlName.qualified('string'), [], [
+              XmlElement(XmlName('string'), [], [
                 XmlText('naversearchthirdlogin'),
               ]),
             );
@@ -239,15 +239,15 @@ Future<bool> configureIOS({
           if (!schemeAlreadyRegistered) {
             urlTypesArray.children.add(XmlText('\t\t'));
             urlTypesArray.children.add(
-              XmlElement(XmlName.qualified('dict'), [], [
+              XmlElement(XmlName('dict'), [], [
                 XmlText('\n\t\t\t'),
-                XmlElement(XmlName.qualified('key'), [], [
+                XmlElement(XmlName('key'), [], [
                   XmlText('CFBundleURLSchemes'),
                 ]),
                 XmlText('\n\t\t\t'),
-                XmlElement(XmlName.qualified('array'), [], [
+                XmlElement(XmlName('array'), [], [
                   XmlText('\n\t\t\t\t'),
-                  XmlElement(XmlName.qualified('string'), [], [
+                  XmlElement(XmlName('string'), [], [
                     XmlText(urlScheme),
                   ]),
                   XmlText('\n\t\t\t'),
@@ -261,23 +261,23 @@ Future<bool> configureIOS({
       } else {
         rootDict.children.add(XmlText('\t'));
         rootDict.children.add(
-          XmlElement(XmlName.qualified('key'), [], [
+          XmlElement(XmlName('key'), [], [
             XmlText('CFBundleURLTypes'),
           ]),
         );
         rootDict.children.add(XmlText('\n\t'));
         rootDict.children.add(
-          XmlElement(XmlName.qualified('array'), [], [
+          XmlElement(XmlName('array'), [], [
             XmlText('\n\t\t'),
-            XmlElement(XmlName.qualified('dict'), [], [
+            XmlElement(XmlName('dict'), [], [
               XmlText('\n\t\t\t'),
-              XmlElement(XmlName.qualified('key'), [], [
+              XmlElement(XmlName('key'), [], [
                 XmlText('CFBundleURLSchemes'),
               ]),
               XmlText('\n\t\t\t'),
-              XmlElement(XmlName.qualified('array'), [], [
+              XmlElement(XmlName('array'), [], [
                 XmlText('\n\t\t\t\t'),
-                XmlElement(XmlName.qualified('string'), [], [
+                XmlElement(XmlName('string'), [], [
                   XmlText(urlScheme),
                 ]),
                 XmlText('\n\t\t\t'),

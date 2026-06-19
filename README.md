@@ -55,25 +55,7 @@ dart run naver_login_flutter:configure --app-name="Your App" --client-id="xxx" -
 
 > **Note:** If you prefer not to use the CLI and need to configure your projects manually, you must still follow our secure secret management approach. Do not hardcode your client secret directly into public configuration files. See the **[Manual Configuration Guide](doc/MANUAL_CONFIGURATION.md)** for step-by-step instructions.
 
-### 3. Update your AppDelegate (iOS Only):
 
-```swift
-import NidThirdPartyLogin
-
-@UIApplicationMain
-class AppDelegate: FlutterAppDelegate {
-    override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        if NidOAuth.shared.handleURL(url) { // If the URL was passed from the Naver app
-          return true
-        }
-     		
-        // Handle URLs coming from other apps
-        return super.application(app, open: url, options: options)
-    }
-}
-```
-
-> **Warning for multiple SDKs:** If you are already using other login SDKs (like Kakao, Facebook, etc.) or deep-link plugins, you might already have the `application(_:open:options:)` method overridden. In this case, simply add the `if NidOAuth.shared.handleURL(url)` check to your existing method rather than duplicating the entire function, which will cause compilation errors.
 
 ## Migration Guide
 

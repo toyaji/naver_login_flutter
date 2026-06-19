@@ -215,6 +215,81 @@ Future<bool> configureIOS({
         }
       }
 
+      // Register the redirect URL scheme in CFBundleURLTypes so iOS routes the
+      // OAuth callback (scheme://...) back to the app. Without this the login
+      // succeeds in Safari/Naver app but never returns to Flutter.
+      var urlTypesKey =
+          rootDict.children
+              .whereType<XmlElement>()
+              .where(
+                (e) =>
+                    e.name.local == 'key' &&
+                    e.innerText == 'CFBundleURLTypes',
+              )
+              .firstOrNull;
+
+      bool schemeAlreadyRegistered = false;
+      if (urlTypesKey != null) {
+        final urlTypesArray = urlTypesKey.nextElementSibling;
+        if (urlTypesArray != null && urlTypesArray.name.local == 'array') {
+          schemeAlreadyRegistered = urlTypesArray
+              .findAllElements('string')
+              .any((e) => e.innerText == urlScheme);
+
+          if (!schemeAlreadyRegistered) {
+            urlTypesArray.children.add(XmlText('\t\t'));
+            urlTypesArray.children.add(
+              XmlElement(XmlName.qualified('dict'), [], [
+                XmlText('\n\t\t\t'),
+                XmlElement(XmlName.qualified('key'), [], [
+                  XmlText('CFBundleURLSchemes'),
+                ]),
+                XmlText('\n\t\t\t'),
+                XmlElement(XmlName.qualified('array'), [], [
+                  XmlText('\n\t\t\t\t'),
+                  XmlElement(XmlName.qualified('string'), [], [
+                    XmlText(urlScheme),
+                  ]),
+                  XmlText('\n\t\t\t'),
+                ]),
+                XmlText('\n\t\t'),
+              ]),
+            );
+            urlTypesArray.children.add(XmlText('\n\t'));
+          }
+        }
+      } else {
+        rootDict.children.add(XmlText('\t'));
+        rootDict.children.add(
+          XmlElement(XmlName.qualified('key'), [], [
+            XmlText('CFBundleURLTypes'),
+          ]),
+        );
+        rootDict.children.add(XmlText('\n\t'));
+        rootDict.children.add(
+          XmlElement(XmlName.qualified('array'), [], [
+            XmlText('\n\t\t'),
+            XmlElement(XmlName.qualified('dict'), [], [
+              XmlText('\n\t\t\t'),
+              XmlElement(XmlName.qualified('key'), [], [
+                XmlText('CFBundleURLSchemes'),
+              ]),
+              XmlText('\n\t\t\t'),
+              XmlElement(XmlName.qualified('array'), [], [
+                XmlText('\n\t\t\t\t'),
+                XmlElement(XmlName.qualified('string'), [], [
+                  XmlText(urlScheme),
+                ]),
+                XmlText('\n\t\t\t'),
+              ]),
+              XmlText('\n\t\t'),
+            ]),
+            XmlText('\n\t'),
+          ]),
+        );
+        rootDict.children.add(XmlText('\n'));
+      }
+
       plistFile.writeAsStringSync(document.toXmlString(pretty: false));
       stdout.writeln('  [OK] Updated ios/Runner/Info.plist');
     } catch (e) {

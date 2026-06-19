@@ -49,7 +49,7 @@ private enum NaverLoginPluginMethod {
 
 /// 네이버 로그인 플러그인의 메인 클래스
 @objc
-public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
+public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeCycleDelegate {
     private var pendingResult: FlutterResult?
 
     // MARK: - Lifecycle
@@ -93,6 +93,12 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
             name: "naver_login_flutter",
             binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(instance, channel: channel)
+        // 레거시(AppDelegate) 생명주기: application(_:open:options:) 콜백 수신
+        registrar.addApplicationDelegate(instance)
+        // UIScene 생명주기(Flutter 신규 템플릿의 FlutterSceneDelegate):
+        // scene(_:openURLContexts:) 콜백 수신. 이 경로가 없으면 SceneDelegate 기반
+        // 앱에서는 로그인 콜백 URL이 플러그인까지 전달되지 않아 인증이 완료되지 않는다.
+        registrar.addSceneDelegate(instance)
     }
 
     // MARK: - Handle Method Calls
@@ -131,6 +137,37 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin {
             pendingResult?(FlutterMethodNotImplemented)
             pendingResult = nil
         }
+    }
+
+    // MARK: - URL Callback Handling
+
+    /// 들어온 URL이 네이버 전용 URL Scheme일 때만 SDK에 전달한다.
+    /// - Returns: 네이버가 처리한 경우 `true`. 그 외에는 `false`를 반환해
+    ///            다른 딥링크 플러그인이 같은 URL을 이어서 처리할 수 있도록 한다.
+    private func handleNaverURL(_ url: URL) -> Bool {
+        // 충돌 방지: Info.plist에 등록된 네이버 전용 URL Scheme인지 먼저 확인
+        guard let scheme = Bundle.main.infoDictionary?["NidUrlScheme"] as? String,
+              url.scheme?.lowercased() == scheme.lowercased() else {
+            return false
+        }
+        return NidOAuth.shared.handleURL(url)
+    }
+
+    /// 레거시(UIApplicationDelegate) 생명주기 경로 - AppDelegate 기반 앱
+    public func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return handleNaverURL(url)
+    }
+
+    /// UIScene 생명주기 경로 - SceneDelegate(FlutterSceneDelegate) 기반 앱.
+    /// 앱이 실행 중일 때 들어오는 URL은 이 콜백으로만 전달되므로 반드시 처리해야 한다.
+    @available(iOS 13.0, *)
+    public func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
+        for context in URLContexts {
+            if handleNaverURL(context.url) {
+                return true
+            }
+        }
+        return false
     }
 
     // MARK: - Handler Methods

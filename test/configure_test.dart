@@ -164,6 +164,75 @@ android {
       expect(plist, isNot(contains('NEW_ID')));
     });
 
+    test('iOS Configurator registers the redirect URL scheme in '
+        'CFBundleURLTypes', () async {
+      final plistFile = File(
+        path.join(tempDir.path, 'ios', 'Runner', 'Info.plist'),
+      );
+      plistFile.writeAsStringSync('''
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>test_app</string>
+</dict>
+</plist>
+''');
+
+      final success = await configureIOS(
+        appName: 'TestApp',
+        clientId: 'test_id',
+        clientSecret: 'test_client_secret',
+        urlScheme: 'mynaverscheme',
+        projectDir: tempDir.path,
+      );
+
+      expect(success, isTrue);
+      final plist = plistFile.readAsStringSync();
+      expect(plist, contains('CFBundleURLTypes'));
+      expect(plist, contains('CFBundleURLSchemes'));
+      expect(plist, contains('<string>mynaverscheme</string>'));
+    });
+
+    test('iOS Configurator does not duplicate an already registered URL scheme',
+        () async {
+      final plistFile = File(
+        path.join(tempDir.path, 'ios', 'Runner', 'Info.plist'),
+      );
+      plistFile.writeAsStringSync('''
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mynaverscheme</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
+''');
+
+      final success = await configureIOS(
+        appName: 'TestApp',
+        clientId: 'test_id',
+        clientSecret: 'test_client_secret',
+        urlScheme: 'mynaverscheme',
+        projectDir: tempDir.path,
+      );
+
+      expect(success, isTrue);
+      final plist = plistFile.readAsStringSync();
+      // The scheme should appear exactly twice: once as the NidUrlScheme value
+      // and once inside the pre-existing CFBundleURLSchemes array (not added a
+      // second time).
+      expect(
+        '<string>mynaverscheme</string>'.allMatches(plist).length,
+        2,
+      );
+    });
+
     test('iOS Configurator gracefully handles weirdly formatted XML', () async {
       final plistFile = File(
         path.join(tempDir.path, 'ios', 'Runner', 'Info.plist'),

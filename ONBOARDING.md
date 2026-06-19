@@ -32,10 +32,34 @@
 
 ### A. Naver Developers 등록 및 키 발급
 1. [네이버 개발자 센터](https://developers.naver.com/)에서 애플리케이션을 등록합니다.
-2. Android 및 iOS 플랫폼을 추가하여 아래 정보를 획득합니다.
-   - Client ID (`ConsumerKey`)
-   - Client Secret (`ConsumerSecret`)
-   - URL Scheme (iOS 로그인 리다이렉션을 위함)
+2. **내 애플리케이션 > API 설정** 탭에서 **로그인 오픈 API 서비스 환경**에 **Android**와 **iOS** 플랫폼을 추가합니다.
+3. 각 플랫폼별 설정 항목을 아래와 같이 등록하고 발급된 정보를 획득합니다.
+
+#### 📱 iOS 설정 항목
+* **다운로드 URL**: 서비스 중인 앱스토어 URL (개발 중에는 임의의 URL 입력 가능)
+* **URL Scheme**: iOS 로그인 완료 후 앱으로 되돌아오기 위한 스키마 (예: `zellynaver`)
+  > [!IMPORTANT]
+  > 네이버 SDK 제약 상 URL Scheme은 **영문 소문자로만** 구성해야 정상 작동합니다.
+* **Client ID** (`ConsumerKey`)
+* **Client Secret** (`ConsumerSecret`)
+
+#### 🤖 Android 설정 항목
+* **다운로드 URL**: 서비스 중인 플레이스토어 URL (개발 중에는 임의의 URL 입력 가능)
+* **안드로이드 앱 패키지 이름**: 프로젝트 Android 앱의 패키지명 (예: `com.example.naver_login_flutter_example`)
+* **안드로이드 앱 단말기 키 해시(Key Hash)**:
+  앱이 빌드될 때 사용된 인증서 서명의 키 해시 값을 등록해야 합니다. 개발 단계(디버그)와 릴리즈 단계의 키 해시가 각각 필요하며, 일치하지 않으면 로그인 시 오류가 발생합니다.
+
+  **디버그 키 해시(Debug Key Hash) 추출 명령어:**
+  * **macOS / Linux:**
+    ```bash
+    keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+    ```
+  * **Windows (PowerShell):**
+    ```powershell
+    keytool -exportcert -alias androiddebugkey -keystore $env:USERPROFILE\.android\debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+    ```
+    *(참고: `keytool` 명령어를 사용하려면 JDK가 설치되어 있어야 하며, `openssl`이 환경 변수에 등록되어 있어야 합니다.)*
+
 
 ### B. 자동 설정 (CLI) - 가장 권장하는 방법
 

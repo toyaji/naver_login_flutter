@@ -22,7 +22,15 @@ allprojects {
 }
 
 apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
+
+// Flutter 3.44+ / AGP 9+ 부터는 Kotlin 이 빌드 도구에 내장(Built-in Kotlin)되어
+// 플러그인이 Kotlin Gradle Plugin(KGP)을 직접 apply 하면 향후 빌드가 실패한다.
+// 따라서 AGP 9 미만(구버전 Flutter/툴체인)에서만 kotlin-android 를 적용해 하위호환을 유지한다.
+// 참고: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+def agpMajorVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize(".")[0] as int
+if (agpMajorVersion < 9) {
+    apply plugin: "kotlin-android"
+}
 
 android {
     namespace = "com.example.naver_login_flutter"
@@ -32,10 +40,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
     }
 
     sourceSets {
@@ -63,5 +67,13 @@ android {
                showStandardStreams = true
             }
         }
+    }
+}
+
+// kotlinOptions {} 는 KGP 전용 DSL 이라 Built-in Kotlin(AGP 9+) 환경에서 사라진다.
+// 양쪽 모두에서 동작하는 kotlin { compilerOptions {} } 로 jvmTarget 을 설정한다.
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }

@@ -12,6 +12,8 @@
    - iOS 의존성을 추가하거나 업데이트할 때 CocoaPods(Podfile, Podspec의 dependency)를 사용하지 않고, 반드시 Swift Package Manager(`Package.swift`)를 사용해야 합니다.
 3. **네이티브 SDK 호환성 존중**:
    - 네이버 로그인 iOS SDK는 버전에 따라 모듈명이 `NaverThirdPartyLogin` 또는 `NidThirdPartyLogin`으로 변경되었습니다. 이를 변경할 때는 헤더 임포트 및 관련 API 서명(`NidOAuth.shared`)이 정상 매핑되는지 검증해야 합니다.
+4. **린트(Lint) 에러 확인 의무화**:
+   - 코드 작업 후에는 반드시 `flutter analyze` 또는 `dart analyze`를 실행하여 새로운 린트 에러가 발생하지 않았는지 확인하고 즉시 수정해야 합니다.
 
 ---
 

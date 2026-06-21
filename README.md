@@ -19,7 +19,7 @@ This repository is a **dedicated fork** of [yoonjaepark/flutter_naver_login](htt
 
 ### Why this Fork exists?
 * **2026 CocoaPods Deprecation Response**: Apple and the Flutter ecosystem are phasing out CocoaPods (switching to read-only mode by the end of 2026). This plugin is refactored to fully support **Swift Package Manager (SPM)** native dependency mapping on iOS.
-* **Xcode Build Speed Optimization**: Mixing CocoaPods and SPM in large projects (such as Zelly) invalidates the Xcode incremental build cache, causing significant compilation bottlenecks (often over 170 seconds). By transitioning this package to SPM, we restore build caching functionality.
+* **Xcode Build Speed Optimization**: Mixing CocoaPods and SPM in large projects invalidates the Xcode incremental build cache, causing significant compilation bottlenecks (often over 170 seconds). By transitioning this package to SPM, we restore build caching functionality.
 * **Active Community Maintenance**: As the original repository lacks frequent updates, this fork ensures compatibility with the latest Flutter stable versions and native SDK revisions.
 
 ## 📚 Onboarding & AI Guidelines

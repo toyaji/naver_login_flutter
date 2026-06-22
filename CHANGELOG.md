@@ -1,3 +1,6 @@
+## 3.0.4
+* **Android ProGuard 호환성 수정**: R8 활성화 환경에서 Naver Login SDK 내부 Koin DI 클래스가 제거/난독화되어 `NidServiceLocator.<clinit>`에서 `ClassCastException`이 발생하는 문제를 수정했습니다. `consumer-rules.pro`를 추가하여 앱 빌드 시 별도 설정 없이 자동으로 SDK 클래스가 보존됩니다.
+
 ## 3.0.3
 * **가져오기 편의성 개선**: 패키지를 사용할 때 메인 패키지 파일(`package:naver_login_flutter/naver_login_flutter.dart`)만 가져와도 모든 주요 데이터 타입과 열거형에 직접 접근할 수 있도록 `export` 설정을 추가했습니다. 예제 앱 및 문서를 이에 맞추어 업데이트했습니다.
 

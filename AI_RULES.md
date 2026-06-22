@@ -19,6 +19,20 @@
 
 ## 🛑 2. 절대 금지 조항 (Critical Constraints)
 
+- **[FORBIDDEN] 잘못된 레포지토리로 PR 생성 금지**:
+   - **`toyaji/naver_login_flutter`는 이 패키지의 공식 정식 레포지토리입니다.** 기여자(contributor) 포함 모든 PR의 대상은 이 레포여야 합니다.
+   - `yoonjaepark/flutter_naver_login`과 `syonkr/flutter_naver_login`은 이 프로젝트가 파생된 legacy 레포지토리입니다. 이 두 레포는 더 이상 활성 관리되지 않으며, 어떤 PR도 이곳으로 보내서는 안 됩니다.
+   - `gh pr create` 실행 시 `--repo toyaji/naver_login_flutter`를 **항상** 명시해야 합니다. `--repo` 플래그를 생략하면 gh CLI가 Git remote 설정을 기반으로 legacy 레포를 자동 선택할 수 있으므로 반드시 명시해야 합니다.
+   ```bash
+   # ✅ 올바른 예시 (기여자 포함 모두 동일)
+   gh pr create --repo toyaji/naver_login_flutter --title "..." --body "..."
+
+   # ❌ 절대 금지 — legacy 레포로 날아갈 수 있음
+   gh pr create --title "..." --body "..."
+   gh pr create --repo syonkr/flutter_naver_login --title "..." --body "..."
+   gh pr create --repo yoonjaepark/flutter_naver_login --title "..." --body "..."
+   ```
+
 - **[FORBIDDEN] 임의의 Git 푸시 및 커밋 금지**:
    - 작업 중 `git push` 명령어는 **절대** 사용자의 명시적인 허락 없이 실행해서는 안 됩니다.
    - 로컬 작업물을 함부로 `git commit` 하거나 푸시하여 기존 작업 흐름을 방해하지 마십시오.

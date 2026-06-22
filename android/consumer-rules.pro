@@ -2,5 +2,4 @@
 # NidServiceLocator.<clinit>에서 ClassCastException이 발생하므로 전체 보존
 -keep class com.navercorp.nid.** { *; }
 -keep interface com.navercorp.nid.** { *; }
--keepclassmembers class com.navercorp.nid.** { *; }
 -dontwarn com.navercorp.nid.**

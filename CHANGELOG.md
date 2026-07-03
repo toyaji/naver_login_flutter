@@ -1,3 +1,6 @@
+## 3.0.5
+* **iOS 재로그인 네트워크 오류 완화**: 로그아웃 직후 재로그인 시 Naver SDK 내부 URLSession 커넥션 풀 문제로 `NSURLErrorNetworkConnectionLost(-1005)`가 발생하는 경우가 있어, 해당 에러에 한해 로그인을 1회 자동 재시도하도록 했습니다. 네이버 SDK 측 권고에 따른 완화 조치이며, 그 외 로그인 동작에는 영향이 없습니다. ([naver/naveridlogin-sdk-ios-swift#6](https://github.com/naver/naveridlogin-sdk-ios-swift/issues/6))
+
 ## 3.0.4
 * **Android ProGuard 호환성 수정**: R8 활성화 환경에서 Naver Login SDK 내부 Koin DI 클래스가 제거/난독화되어 `NidServiceLocator.<clinit>`에서 `ClassCastException`이 발생하는 문제를 수정했습니다. `consumer-rules.pro`를 추가하여 앱 빌드 시 별도 설정 없이 자동으로 SDK 클래스가 보존됩니다.
 

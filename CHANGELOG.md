@@ -1,3 +1,7 @@
+## 3.1.0
+* **Built-in Kotlin & SDK Update**: Bumped minimum Flutter SDK to 3.44.0 to support Built-in Kotlin. Removed explicit `kotlin-android` plugin application from Android Gradle scripts to prevent future build failures.
+* **CocoaPods Removal**: Removed CocoaPods integration from the example iOS project.
+
 ## 3.0.5
 * **iOS 재로그인 네트워크 오류 완화**: 로그아웃 직후 재로그인 시 Naver SDK 내부 URLSession 커넥션 풀 문제로 `NSURLErrorNetworkConnectionLost(-1005)`가 발생하는 경우가 있어, 해당 에러에 한해 로그인을 1회 자동 재시도하도록 했습니다. 네이버 SDK 측 권고에 따른 완화 조치이며, 그 외 로그인 동작에는 영향이 없습니다. ([naver/naveridlogin-sdk-ios-swift#6](https://github.com/naver/naveridlogin-sdk-ios-swift/issues/6))
 

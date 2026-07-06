@@ -202,7 +202,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
         sendResult(status: .loggedOut)
     }
 
-    private func handleLogin(isRetry: Bool = false) {
+    private func handleLogin() {
         NidOAuth.shared.requestLogin { [weak self] result in
             switch result {
             case .success(let loginResult):
@@ -222,13 +222,6 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
                     }
                 }
             case .failure(let error):
-                // 네이버 SDK가 로그아웃 직후 재로그인 시 공유 URLSession 커넥션 풀 문제로
-                // NSURLErrorNetworkConnectionLost(-1005)를 반환하는 경우가 있음. 네이버 측 권고에 따라
-                // 1회에 한해 재시도한다. (참고: naver/naveridlogin-sdk-ios-swift#6)
-                if !isRetry, self?.isNetworkConnectionLostError(error) == true {
-                    self?.handleLogin(isRetry: true)
-                    return
-                }
                 // 에러 메시지를 더 자세히 확인
                 if error.localizedDescription.contains("cancel") {
                     self?.sendError(message: "Login cancelled by user")
@@ -237,14 +230,6 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
                 }
             }
         }
-    }
-
-    func isNetworkConnectionLostError(_ error: NidError) -> Bool {
-        guard case .serverError(.networkError(let underlyingError)) = error else {
-            return false
-        }
-        let nsError = underlyingError as NSError?
-        return nsError?.domain == NSURLErrorDomain && nsError?.code == NSURLErrorNetworkConnectionLost
     }
 
     private func handleLogout() {

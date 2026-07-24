@@ -5,9 +5,9 @@
     
     <application android:name="${applicationName}" android:label="naver_login_flutter_example" android:icon="@mipmap/ic_launcher" android:usesCleartextTraffic="true">
         <!-- 네이버 로그인 설정 -->
-        <meta-data android:name="com.naver.sdk.clientId" android:value="CLI_ID_123"/>
+        <meta-data android:name="com.naver.sdk.clientId" android:value="@string/client_id"/>
         <meta-data android:name="com.naver.sdk.clientSecret" android:value="@string/client_secret"/>
-        <meta-data android:name="com.naver.sdk.clientName" android:value="Zelly CLI Test"/>
+        <meta-data android:name="com.naver.sdk.clientName" android:value="@string/client_name"/>
 
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             

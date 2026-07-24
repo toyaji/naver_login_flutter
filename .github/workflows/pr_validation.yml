@@ -23,7 +23,6 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: |
-            example/android/app/src/main/AndroidManifest.xml
             example/ios/Runner/Info.plist
 
       - name: Verify no unauthorized changes

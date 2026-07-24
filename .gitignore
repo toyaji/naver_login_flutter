@@ -31,3 +31,4 @@ build/
 naver_login_flutter.iml
 pubspec.lock
 .vscode
+.env

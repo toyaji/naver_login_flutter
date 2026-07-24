@@ -6,7 +6,9 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 
+val naverClientId = localProperties.getProperty("naver.client_id") ?: "dummy_id"
 val naverClientSecret = localProperties.getProperty("naver.client_secret") ?: "dummy_secret"
+val naverClientName = localProperties.getProperty("naver.client_name") ?: "dummy_name"
 
 plugins {
     id("com.android.application")
@@ -31,7 +33,9 @@ android {
 
 
     defaultConfig {
+        resValue("string", "client_id", naverClientId.toString())
         resValue("string", "client_secret", naverClientSecret.toString())
+        resValue("string", "client_name", naverClientName.toString())
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.naver_login_flutter_example"
         // You can update the following values to match your application needs.

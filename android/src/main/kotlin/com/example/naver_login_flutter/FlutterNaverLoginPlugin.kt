@@ -202,7 +202,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
         }
     }
 
-    private suspend fun getCurrentAccount(result: Result) {
+    private suspend fun getCurrentAccount(result: Result, includeToken: Boolean = false) {
         // SDK 초기화 상태 확인
         try {
             val state = NidOAuth.getState()
@@ -218,11 +218,19 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
             return
         }
 
+        // 로그인 결과에는 iOS와 동일하게 토큰 정보를 함께 반환한다 (#14)
+        val tokenInfo = if (includeToken) mapOf(
+            "accessToken" to accessToken,
+            "refreshToken" to (NidOAuth.getRefreshToken() ?: ""),
+            "tokenType" to (NidOAuth.getTokenType() ?: "bearer"),
+            "expiresAt" to formatExpiresAt(NidOAuth.getExpiresAt())
+        ) else null
+
         try {
             val res = getUserInfo(accessToken)
             val obj = JSONObject(res)
             val account = jsonObjectToMap(obj.getJSONObject("response"))
-            sendResult(NaverLoginStatus.LOGGED_IN, null, account, result)
+            sendResult(NaverLoginStatus.LOGGED_IN, tokenInfo, account, result)
         } catch (e: InterruptedException) {
             e.printStackTrace()
             sendError("Failed to get user info: ${e.message}", result)
@@ -252,7 +260,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
         val mOAuthLoginHandler = object : NidOAuthCallback {
             override fun onSuccess() {
                 mainScope.launch {
-                    getCurrentAccount(result)
+                    getCurrentAccount(result, includeToken = true)
                 }
             }
 

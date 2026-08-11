@@ -1,5 +1,6 @@
 ## 3.1.2
 * **Android 로그인 결과 accessToken 누락 수정**: Android에서 `login()` 성공 시 `NaverLoginResult.accessToken`이 항상 `null`로 반환되던 문제를 수정했습니다. 이제 iOS와 동일하게 로그인 결과에 토큰 정보(accessToken, refreshToken, tokenType, expiresAt)가 포함됩니다. ([#14](https://github.com/toyaji/naver_login_flutter/issues/14))
+* **Android 16 screenOrientation 크래시 수정**: Android 15/16의 strict mode 정책으로 인해 Naver SDK의 `NidOAuthCustomTabActivity`에서 발생하던 크래시를 수정했습니다. 플러그인 매니페스트에서 해당 액티비티의 `screenOrientation`을 `unspecified`로 오버라이드합니다. ([#13](https://github.com/toyaji/naver_login_flutter/issues/13))
 
 ## 3.1.1
 * **iOS 로그인 재시도 로직 제거 (롤백)**: v3.0.5(및 v3.1.0)에 추가되었던 `-1005 (NSURLErrorNetworkConnectionLost)` 에러 발생 시 자동 로그인 재시도하는 로직을 제거했습니다. 실제 환경에서 에러가 정상 판별되지 않고, 강제 재시도 시 네이버 앱이 연속으로 2회 실행되어 부자연스러운 사용자 흐름을 만드는 UX 결함이 식별되어 롤백 조치했습니다. 해당 이슈는 네이버 네이티브 iOS SDK 측의 자체적인 커넥션 풀 문제로, 추후 네이티브 SDK 업데이트 버전이 릴리즈되면 수정 버전을 제공할 예정입니다.

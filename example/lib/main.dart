@@ -173,10 +173,19 @@ class _MyHomePageState extends State<MyHomePage> {
         _showToast('로그인 성공');
       }
 
+      logger.i('buttonLoginPressed: login result has accessToken: ${res.accessToken != null}');
+
       setState(() {
         isLogin = res.status == NaverLoginStatus.loggedIn;
         if (res.account != null) {
           userInfo = res.account;
+        }
+        // 로그인 결과에 포함된 토큰 정보 표시 (#14 검증)
+        if (res.accessToken != null) {
+          accessToken = res.accessToken?.accessToken;
+          refreshToken = res.accessToken?.refreshToken;
+          tokenType = res.accessToken?.tokenType;
+          expiresAt = res.accessToken?.expiresAt;
         }
       });
     } catch (error) {

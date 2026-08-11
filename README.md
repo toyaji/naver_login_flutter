@@ -108,6 +108,8 @@ import 'package:naver_login_flutter/naver_login_flutter.dart';
 class NaverLoginResult {
   final NaverLoginStatus status;
   final NaverAccountResult? account;
+  final NaverToken? accessToken; // token info, included on successful logIn()
+  final String? errorMessage;    // set when status is error
 }
 ```
 
@@ -159,6 +161,8 @@ try {
     // Login successful
     final account = res.account;
     print('User name: ${account?.name}');
+    final token = res.accessToken;
+    print('Access token: ${token?.accessToken}');
   }
 } catch (error) {
   print('Login failed: $error');

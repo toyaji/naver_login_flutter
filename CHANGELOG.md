@@ -1,4 +1,5 @@
 ## 3.2.0
+* **`isLoggedIn()` 예외 발생 수정**: `FlutterNaverLogin.isLoggedIn()`이 로그인 상태와 무관하게 항상 타입 오류로 실패하던 문제를 수정했습니다. 네이티브가 다른 메서드와 동일하게 `{"status": ...}` Map을 반환하는데 Dart가 `bool`로 읽고 있던 것이 원인입니다. 네이티브 동작 변경은 없습니다. ([#18](https://github.com/toyaji/naver_login_flutter/issues/18))
 * **Android client secret 로그 노출 수정**: Android 플러그인이 `println`으로 client secret 전문을 logcat에 출력하던 문제를 수정했습니다. 이제 앞 3자와 길이만 남긴 마스킹 값(`abc******* (10 chars)`)으로 출력되어, 설정이 제대로 주입됐는지는 확인하면서도 값 자체는 노출되지 않습니다. ([#17](https://github.com/toyaji/naver_login_flutter/issues/17))
 * **로그 출력 제어 추가**: 플러그인이 등록 시점에 무조건 SDK 로그를 켜던 동작을 제거하고, 앱이 로그 출력을 제어할 수 있도록 했습니다. ([#17](https://github.com/toyaji/naver_login_flutter/issues/17))
   * `FlutterNaverLogin.setLogEnabled(bool)` API로 런타임에 켜고 끌 수 있습니다.

@@ -81,10 +81,16 @@ class MethodChannelFlutterNaverLogin extends FlutterNaverLoginPlatform {
   }
 
   /// 현재 로그인 상태를 확인하는 메서드
+  ///
+  /// 네이티브는 다른 메서드와 동일하게 `{"status": ...}` Map을 반환한다.
   @override
   Future<bool> isLoggedIn() async {
-    final result = await methodChannel.invokeMethod<bool>('isLoggedIn');
-    return result ?? false;
+    try {
+      final result = await methodChannel.invokeMethod<Map>('isLoggedIn');
+      return result?['status'] == 'loggedin';
+    } on PlatformException {
+      return false;
+    }
   }
 
   /// 디버그 로그 출력을 켜거나 끄는 메서드

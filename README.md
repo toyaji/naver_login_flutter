@@ -220,6 +220,29 @@ try {
 }
 ```
 
+#### Debug Logging
+```dart
+// Turn the plugin's debug logs on or off at runtime.
+await FlutterNaverLogin.setLogEnabled(false);
+```
+
+Logging is **off by default in release builds** and on in debug builds.
+
+On Android you can also set the initial value in `AndroidManifest.xml`:
+
+```xml
+<meta-data android:name="com.naver.sdk.logEnabled" android:value="false"/>
+```
+
+If the meta-data is absent, the plugin follows your app's `debuggable` flag.
+
+> **Note**
+> The client secret is never printed in full. It appears masked (`abc******* (10 chars)`)
+> so you can confirm the value was injected without exposing it.
+>
+> On iOS the Naver SDK provides no log on/off API, so `setLogEnabled` controls the
+> plugin's own logs only; the SDK's internal logs are not affected.
+
 ## Troubleshooting
 
 ### iOS Issues

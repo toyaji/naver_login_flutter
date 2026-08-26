@@ -89,4 +89,15 @@ class FlutterNaverLogin {
     return FlutterNaverLoginPlatform.instance
         .refreshAccessTokenWithRefreshToken();
   }
+
+  /// 디버그 로그 출력을 켜거나 끕니다.
+  ///
+  /// 초기값은 Android의 경우 `AndroidManifest.xml`의 `com.naver.sdk.logEnabled`
+  /// 메타데이터를 따르며, 값이 없으면 앱의 debuggable 여부를 따릅니다.
+  /// iOS는 디버그 빌드에서 켜지고 릴리스 빌드에서 꺼집니다.
+  ///
+  /// iOS의 네이버 SDK 내부 로그는 SDK가 제어 수단을 제공하지 않아 대상에서 제외됩니다.
+  static Future<void> setLogEnabled(bool enabled) {
+    return FlutterNaverLoginPlatform.instance.setLogEnabled(enabled);
+  }
 }

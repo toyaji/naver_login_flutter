@@ -87,6 +87,14 @@ class MethodChannelFlutterNaverLogin extends FlutterNaverLoginPlatform {
     return result ?? false;
   }
 
+  /// 디버그 로그 출력을 켜거나 끄는 메서드
+  @override
+  Future<void> setLogEnabled(bool enabled) async {
+    await methodChannel.invokeMethod<void>('setLogEnabled', {
+      'enabled': enabled,
+    });
+  }
+
   /// 현재 액세스 토큰 정보를 조회하는 메서드
   @override
   Future<NaverToken> getCurrentAccessToken() async {

@@ -102,6 +102,13 @@ void main() {
     expect(result, true);
   });
 
+  test('setLogEnabled', () async {
+    await platform.setLogEnabled(false);
+    expect(log, <Matcher>[
+      isMethodCall('setLogEnabled', arguments: {'enabled': false}),
+    ]);
+  });
+
   test('getCurrentAccessToken', () async {
     final result = await platform.getCurrentAccessToken();
     expect(log, <Matcher>[

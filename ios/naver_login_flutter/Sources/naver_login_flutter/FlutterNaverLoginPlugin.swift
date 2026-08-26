@@ -21,6 +21,7 @@ private enum NaverLoginPluginMethod {
     case getCurrentAccessToken
     case refreshAccessTokenWithRefreshToken
     case isLoggedIn
+    case setLogEnabled
     case unknown
     
     init(methodName: String) {
@@ -41,6 +42,8 @@ private enum NaverLoginPluginMethod {
             self = .refreshAccessTokenWithRefreshToken
         case "isLoggedIn":
             self = .isLoggedIn
+        case "setLogEnabled":
+            self = .setLogEnabled
         default:
             self = .unknown
         }
@@ -51,6 +54,20 @@ private enum NaverLoginPluginMethod {
 @objc
 public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeCycleDelegate {
     private var pendingResult: FlutterResult?
+
+    /// 플러그인 로그 출력 여부. 릴리스 빌드에서는 기본으로 꺼진다.
+    /// 네이버 iOS SDK는 로그 on/off API를 제공하지 않아 SDK 내부 로그는 대상이 아니다.
+    private static var isLogEnabled: Bool = {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }()
+
+    private static func logD(_ message: String) {
+        if isLogEnabled { print("[NaverLoginFlutter] \(message)") }
+    }
 
     // MARK: - Lifecycle
 
@@ -74,7 +91,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
               let clientSecret = infoDictionary?["NidClientSecret"] as? String,
               let appName = infoDictionary?["NidAppName"] as? String,
               let urlScheme = infoDictionary?["NidUrlScheme"] as? String else {
-            print("Error: Required Naver Login configuration not found in Info.plist")
+            print("[NaverLoginFlutter] Error: Required Naver Login configuration not found in Info.plist")
             return
         }
         
@@ -133,6 +150,11 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
             handleRefreshToken()
         case .isLoggedIn:
             handleIsLoggedIn()
+        case .setLogEnabled:
+            let enabled = (call.arguments as? [String: Any])?["enabled"] as? Bool ?? false
+            Self.isLogEnabled = enabled
+            pendingResult?(nil)
+            pendingResult = nil
         case .unknown:
             pendingResult?(FlutterMethodNotImplemented)
             pendingResult = nil
@@ -193,7 +215,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
             case "appPreferredWithInAppBrowserFallback":
                 NidOAuth.shared.setLoginBehavior(.appPreferredWithInAppBrowserFallback)
             default:
-                print("Unknown login behavior: \(behavior)")
+                Self.logD("Unknown login behavior: \(behavior)")
                 break
             }
         }

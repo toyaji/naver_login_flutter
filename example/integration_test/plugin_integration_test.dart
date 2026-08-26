@@ -18,4 +18,14 @@ void main() {
     final bool isLoggedIn = await FlutterNaverLogin.isLoggedIn();
     expect(isLoggedIn, false);
   });
+
+  testWidgets('setLogEnabled does not break subsequent calls', (
+    WidgetTester tester,
+  ) async {
+    await FlutterNaverLogin.setLogEnabled(false);
+    await FlutterNaverLogin.setLogEnabled(true);
+
+    // 채널 응답이 정리되지 않으면 이후 호출이 진행 중 요청으로 막힌다.
+    expect(await FlutterNaverLogin.isLoggedIn(), false);
+  });
 }

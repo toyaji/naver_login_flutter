@@ -2,7 +2,9 @@ package com.example.naver_login_flutter
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.util.Log
 import com.navercorp.nid.NidOAuth
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.util.NidOAuthCallback
@@ -45,6 +47,7 @@ enum class FlutterPluginMethod {
     GetCurrentAccessToken,
     RefreshAccessTokenWithRefreshToken,
     IsLoggedIn,
+    SetLogEnabled,
     Unknown;
 
     companion object {
@@ -58,6 +61,7 @@ enum class FlutterPluginMethod {
                 "getCurrentAccessToken" -> GetCurrentAccessToken
                 "refreshAccessTokenWithRefreshToken" -> RefreshAccessTokenWithRefreshToken
                 "isLoggedIn" -> IsLoggedIn
+                "setLogEnabled" -> SetLogEnabled
                 else -> Unknown
             }
         }
@@ -84,14 +88,16 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
     // used to call flutter result in launcher
     private var pendingResult: Result? = null
 
+    // 플러그인/SDK 로그 출력 여부. onAttachedToEngine에서 결정되고
+    // setLogEnabled 채널 메서드로 런타임에 변경할 수 있다.
+    private var isLogEnabled: Boolean = false
+
     // MARK: - FlutterPlugin
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "naver_login_flutter")
         channel.setMethodCallHandler(this)
-
-        NidOAuth.setLogEnabled(true)
 
         try {
             context.packageName?.let { packageName ->
@@ -100,32 +106,49 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
                     PackageManager.GET_META_DATA
                 )?.metaData
 
+                applyInitialLogSetting(bundle)
+
                 if (bundle != null) {
                     val clientId = bundle.getString("com.naver.sdk.clientId")
                     val clientSecret = bundle.getString("com.naver.sdk.clientSecret")
                     val clientName = bundle.getString("com.naver.sdk.clientName")
 
-                    println("=== Naver Login Plugin Registration ===")
-                    println("ClientID: $clientId")
-                    println("ClientSecret: $clientSecret")
-                    println("ClientName: $clientName")
-                    println("===================================")
+                    logD("=== Naver Login Plugin Registration ===")
+                    logD("ClientID: $clientId")
+                    logD("ClientSecret: ${clientSecret.masked()}")
+                    logD("ClientName: $clientName")
+                    logD("===================================")
 
                     if (clientId != null && clientSecret != null && clientName != null) {
                         try {
                             NidOAuth.initialize(context, clientId, clientSecret, clientName)
-                            println("Naver Login SDK initialized successfully on plugin registration")
+                            logD("Naver Login SDK initialized successfully on plugin registration")
                         } catch (e: Exception) {
-                            e.printStackTrace()
-                            println("Failed to initialize Naver Login SDK: ${e.message}")
+                            Log.e(LOG_TAG, "Failed to initialize Naver Login SDK: ${e.message}", e)
                         }
                     }
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error reading AndroidManifest.xml meta-data: ${e.message}")
+            Log.e(LOG_TAG, "Error reading AndroidManifest.xml meta-data: ${e.message}", e)
         }
+    }
+
+    /// 로그 초기값을 결정한다.
+    /// AndroidManifest의 com.naver.sdk.logEnabled 가 있으면 그 값을,
+    /// 없으면 호스트 앱의 debuggable 여부를 따른다.
+    private fun applyInitialLogSetting(bundle: android.os.Bundle?) {
+        val debuggable = (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        setLogEnabled(bundle?.getBoolean("com.naver.sdk.logEnabled", debuggable) ?: debuggable)
+    }
+
+    private fun setLogEnabled(enabled: Boolean) {
+        isLogEnabled = enabled
+        NidOAuth.setLogEnabled(enabled)
+    }
+
+    private fun logD(message: String) {
+        if (isLogEnabled) Log.d(LOG_TAG, message)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -153,7 +176,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
     // MARK: - MethodCallHandler
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        println("🔥 Called method: ${call.method}")
+        logD("Called method: ${call.method}")
 
         when (FlutterPluginMethod.fromMethodName(call.method)) {
             FlutterPluginMethod.InitSdk -> {
@@ -174,6 +197,11 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
             }
             FlutterPluginMethod.RefreshAccessTokenWithRefreshToken -> refreshAccessTokenWithRefreshToken(result)
             FlutterPluginMethod.IsLoggedIn -> isLoggedIn(result)
+            FlutterPluginMethod.SetLogEnabled -> {
+                val enabled = (call.arguments as? Map<*, *>)?.get("enabled") as? Boolean ?: false
+                setLogEnabled(enabled)
+                result.success(null)
+            }
             FlutterPluginMethod.Unknown -> result.notImplemented()
         }
     }
@@ -182,12 +210,10 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
     private fun initSdk(result: Result, clientId: String, clientName: String, clientSecret: String) {
         try {
-            NidOAuth.setLogEnabled(true)
-
-            println("Init SDK")
-            println("- clientId: $clientId")
-            println("- clientName: $clientName")
-            println("- clientSecret: $clientSecret")
+            logD("Init SDK")
+            logD("- clientId: $clientId")
+            logD("- clientName: $clientName")
+            logD("- clientSecret: ${clientSecret.masked()}")
 
             NidOAuth.initialize(context, clientId, clientSecret, clientName)
             sendResult(NaverLoginStatus.LOGGED_OUT, null, null, result)
@@ -249,7 +275,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
         // SDK 초기화 상태 확인
         try {
             val state = NidOAuth.getState()
-            println("Current SDK state: $state")
+            logD("Current SDK state: $state")
         } catch (e: Exception) {
             sendError("SDK not initialized. Please call initSdk first.", result)
             return
@@ -293,7 +319,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
         // 기존 토큰이 있다면 먼저 삭제 (user_cancel 문제 방지)
         try {
             if (NidOAuth.getAccessToken() != null) {
-                println("Existing token found, logging out first")
+                logD("Existing token found, logging out first")
                 NidOAuth.logout(object : NidOAuthCallback {
                     override fun onSuccess() { performLogin() }
                     override fun onFailure(errorCode: String, errorDesc: String) { performLogin() }
@@ -303,7 +329,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
             }
         } catch (e: Exception) {
             // 토큰 체크 실패는 무시하고 계속 진행
-            println("Token check failed: ${e.message}")
+            logD("Token check failed: ${e.message}")
             performLogin()
         }
     }
@@ -352,7 +378,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
     }
 
     private fun getCurrentAccessToken(result: Result) {
-        println("🔥 handleGetCurrentAccessToken")
+        logD("handleGetCurrentAccessToken")
 
         // SDK 초기화 상태 확인
         try {
@@ -508,4 +534,12 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
         result.success(errorInfo)
     }
+}
+private const val LOG_TAG = "NaverLoginFlutter"
+
+/// 값이 들어왔는지만 확인할 수 있게 앞 3자와 길이만 남긴다.
+private fun String?.masked(): String = when {
+    this.isNullOrEmpty() -> "(not set)"
+    length <= 4 -> "*".repeat(length) + " ($length chars)"
+    else -> take(3) + "*".repeat(length - 3) + " ($length chars)"
 }

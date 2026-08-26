@@ -39,7 +39,7 @@ void main() {
                 'account': {'id': 'user123', 'name': 'Test User'},
               };
             case 'isLoggedIn':
-              return true;
+              return {'status': 'loggedin'};
             case 'getCurrentAccessToken':
               return {
                 'accessToken': {
@@ -100,6 +100,27 @@ void main() {
     final result = await platform.isLoggedIn();
     expect(log, <Matcher>[isMethodCall('isLoggedIn', arguments: null)]);
     expect(result, true);
+  });
+
+  test('isLoggedIn returns false when logged out', () async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(platform.methodChannel, (
+          MethodCall methodCall,
+        ) async {
+          log.add(methodCall);
+          return {'status': 'loggedout'};
+        });
+
+    final result = await platform.isLoggedIn();
+    expect(log, <Matcher>[isMethodCall('isLoggedIn', arguments: null)]);
+    expect(result, false);
+  });
+
+  test('setLogEnabled', () async {
+    await platform.setLogEnabled(false);
+    expect(log, <Matcher>[
+      isMethodCall('setLogEnabled', arguments: {'enabled': false}),
+    ]);
   });
 
   test('getCurrentAccessToken', () async {

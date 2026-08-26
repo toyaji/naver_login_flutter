@@ -72,4 +72,9 @@ abstract class FlutterNaverLoginPlatform extends PlatformInterface {
     final result = await getCurrentAccessToken();
     return result.isValid();
   }
+
+  /// 디버그 로그 출력을 켜거나 끕니다.
+  Future<void> setLogEnabled(bool enabled) {
+    throw UnimplementedError('setLogEnabled() has not been implemented.');
+  }
 }

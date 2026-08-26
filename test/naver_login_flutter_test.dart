@@ -26,6 +26,11 @@ class MockFlutterNaverLoginPlatform
   }
 
   @override
+  Future<void> setLogEnabled(bool enabled) async {
+    // Mock implementation
+  }
+
+  @override
   Future<NaverLoginResult> logIn() async {
     return NaverLoginResult(
       status: NaverLoginStatus.loggedIn,

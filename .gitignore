@@ -28,6 +28,12 @@ migrate_working_dir/
 .dart_tool/
 build/
 
+# Swift Package Manager (native iOS plugin build output)
+.build/
+.swiftpm/
+**/ios/**/build_derived/
+**/ios/Flutter/ephemeral/
+
 naver_login_flutter.iml
 pubspec.lock
 .vscode

@@ -1,3 +1,6 @@
+## 3.2.1
+* **iOS SPM 빌드 실패 수정**: `Package.swift`가 네이버 iOS SDK를 `from: "5.1.0"`(다음 메이저 직전까지)로 열어둬서, `Package.resolved` 없이 새로 해석할 때 SwiftPM이 iOS 15를 요구하는 5.2.x를 선택했고, iOS 13을 선언한 플러그인 패키지 타겟과 충돌해 빌드가 깨지던 문제를 수정했습니다. 제약을 `.upToNextMinor(from: "5.1.0")`(= `>=5.1.0 <5.2.0`)로 좁혀 CocoaPods의 `~> 5.1.0`과 동일 범위로 맞췄습니다. 최소 iOS 버전 변경은 없습니다. ([#21](https://github.com/toyaji/naver_login_flutter/issues/21))
+
 ## 3.2.0
 * **`isLoggedIn()` 예외 발생 수정**: `FlutterNaverLogin.isLoggedIn()`이 로그인 상태와 무관하게 항상 타입 오류로 실패하던 문제를 수정했습니다. 네이티브가 다른 메서드와 동일하게 `{"status": ...}` Map을 반환하는데 Dart가 `bool`로 읽고 있던 것이 원인입니다. 네이티브 동작 변경은 없습니다. ([#18](https://github.com/toyaji/naver_login_flutter/issues/18))
 * **Android client secret 로그 노출 수정**: Android 플러그인이 `println`으로 client secret 전문을 logcat에 출력하던 문제를 수정했습니다. 이제 앞 3자와 길이만 남긴 마스킹 값(`abc******* (10 chars)`)으로 출력되어, 설정이 제대로 주입됐는지는 확인하면서도 값 자체는 노출되지 않습니다. ([#17](https://github.com/toyaji/naver_login_flutter/issues/17))

@@ -1,3 +1,10 @@
+## 4.0.0
+* **[BREAKING] 최소 iOS 버전 13 → 15**: 네이버 iOS SDK를 `5.2.x`로 올리면서 최소 지원 iOS가 15.0으로 상승합니다. iOS 13/14 기기는 더 이상 지원되지 않으며, 앱의 `IPHONEOS_DEPLOYMENT_TARGET`도 15.0 이상이어야 합니다.
+  * `Package.swift` / `podspec`의 플랫폼 선언을 `.iOS(.v15)` / `'15.0'`으로, 네이버 SDK 제약을 `~> 5.2.0`으로 변경했습니다.
+  * 예제 앱의 iOS deployment target도 15.0으로 올렸습니다.
+* **iOS 네이버앱 복귀 직후 `-1005` 로그인 실패 해결**: `3.1.1`에서 자체 재시도 로직을 롤백하며 네이티브 SDK 수정을 기다리던 문제가, 네이버 iOS SDK `5.2.0`의 커넥션 처리 수정으로 해결됐습니다.
+* iOS 13을 유지해야 하는 경우 `3.2.1`을 계속 사용하세요.
+
 ## 3.2.1
 * **iOS SPM 빌드 실패 수정**: `Package.swift`가 네이버 iOS SDK를 `from: "5.1.0"`(다음 메이저 직전까지)로 열어둬서, `Package.resolved` 없이 새로 해석할 때 SwiftPM이 iOS 15를 요구하는 5.2.x를 선택했고, iOS 13을 선언한 플러그인 패키지 타겟과 충돌해 빌드가 깨지던 문제를 수정했습니다. 제약을 `.upToNextMinor(from: "5.1.0")`(= `>=5.1.0 <5.2.0`)로 좁혀 CocoaPods의 `~> 5.1.0`과 동일 범위로 맞췄습니다. 최소 iOS 버전 변경은 없습니다. ([#21](https://github.com/toyaji/naver_login_flutter/issues/21))
 

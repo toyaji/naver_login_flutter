@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "naver_login_flutter",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v15)
     ],
     products: [
         .library(
@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-swift.git", .upToNextMinor(from: "5.1.0")),
+        .package(url: "https://github.com/naver/naveridlogin-sdk-ios-swift.git", .upToNextMinor(from: "5.2.0")),
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
     ],
     targets: [

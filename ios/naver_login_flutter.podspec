@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'naver_login_flutter'
-  s.version          = '3.2.1'
+  s.version          = '4.0.0'
   s.summary          = 'A Flutter plugin for using the native Naver Login SDKs on Android and iOS.'
   s.description      = <<-DESC
 A Flutter plugin for using the native Naver Login SDKs on Android and iOS.
@@ -16,13 +16,13 @@ Provides Swift Package Manager (SPM) integration for iOS and Gradle integration 
   s.source           = { :path => '.' }
   s.source_files = 'naver_login_flutter/Sources/naver_login_flutter/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '13.0'
+  s.platform = :ios, '15.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
 
   # 네이버 로그인 라이브러리
-  s.dependency 'NidThirdPartyLogin', '~> 5.1.0'
+  s.dependency 'NidThirdPartyLogin', '~> 5.2.0'
 
   s.swift_version = '5.0'
 

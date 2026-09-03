@@ -1,7 +1,7 @@
 # naver_login_flutter
 [![pub package](https://img.shields.io/pub/v/naver_login_flutter.svg)](https://pub.dev/packages/naver_login_flutter)
 [![Build Status](https://img.shields.io/badge/naverAosSDK-v5.11.2-success.svg)](https://github.com/naver/naveridlogin-sdk-android)
-[![Build Status](https://img.shields.io/badge/naverIosSDK-v5.1.0-success.svg)](https://github.com/naver/naveridlogin-sdk-ios-swift)
+[![Build Status](https://img.shields.io/badge/naverIosSDK-v5.2.1-success.svg)](https://github.com/naver/naveridlogin-sdk-ios-swift)
 [![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://github.com/toyaji/naver_login_flutter)
 
 A Flutter plugin for using the native Naver Login SDKs on Android and iOS.
@@ -258,8 +258,8 @@ If the meta-data is absent, the plugin follows your app's `debuggable` flag.
    ```
 
 2. **Minimum iOS Version**
-   - The Naver Login SDK requires iOS 13.0 or higher.
-   - Solution: Ensure your `ios/Podfile` (if you have one for other plugins) is set to `platform :ios, '13.0'` or higher.
+   - The Naver Login SDK (5.2.x) requires iOS 15.0 or higher.
+   - Solution: Ensure your `ios/Podfile` (if you have one for other plugins) is set to `platform :ios, '15.0'` or higher.
 
 ### Android Issues
 

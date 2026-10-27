@@ -50,7 +50,9 @@ abstract class FlutterNaverLoginPlatform extends PlatformInterface {
   }
 
   /// 네이버 로그인을 수행합니다.
-  Future<NaverLoginResult> logIn();
+  ///
+  /// [reauthenticate]가 `true`이면 네이버 재인증을 요청합니다.
+  Future<NaverLoginResult> logIn({bool reauthenticate = false});
 
   /// 네이버 로그아웃을 수행합니다.
   Future<NaverLoginResult> logOut();

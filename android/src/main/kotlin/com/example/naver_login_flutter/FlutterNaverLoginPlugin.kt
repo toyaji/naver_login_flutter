@@ -186,7 +186,10 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
                 val clientSecret = args["clientSecret"] as String
                 initSdk(result, clientId, clientName, clientSecret)
             }
-            FlutterPluginMethod.LogIn -> login(result)
+            FlutterPluginMethod.LogIn -> {
+                val reauthenticate = (call.arguments as? Map<*, *>)?.get("reauthenticate") as? Boolean ?: false
+                login(result, reauthenticate)
+            }
             FlutterPluginMethod.LogOut -> logout(result)
             FlutterPluginMethod.LogOutAndDeleteToken -> logoutAndDeleteToken(result)
             FlutterPluginMethod.GetCurrentAccessToken -> getCurrentAccessToken(result)
@@ -271,7 +274,7 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
 
 
-    private fun login(result: Result) {
+    private fun login(result: Result, reauthenticate: Boolean) {
         // SDK 초기화 상태 확인
         try {
             val state = NidOAuth.getState()
@@ -309,6 +312,8 @@ class FlutterNaverLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware 
 
         val performLogin = {
             activity?.let {
+                // SDK 전역 상태라 매번 덮어써 이전 값이 남지 않게 한다.
+                NidOAuth.isRequiredCustomTabsReAuth = reauthenticate
                 NidOAuth.requestLogin(it, mOAuthLoginHandler)
             } ?: run {
                 sendError("Activity is null", result)

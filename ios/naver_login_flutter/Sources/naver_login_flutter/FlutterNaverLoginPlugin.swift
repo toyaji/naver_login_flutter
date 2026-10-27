@@ -137,7 +137,8 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
             }
             handleInitSdk(args)
         case .logIn:
-            handleLogin()
+            let reauthenticate = (call.arguments as? [String: Any])?["reauthenticate"] as? Bool ?? false
+            handleLogin(reauthenticate: reauthenticate)
         case .logOut:
             handleLogout()
         case .logoutAndDeleteToken:
@@ -224,8 +225,11 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin, FlutterSceneLifeC
         sendResult(status: .loggedOut)
     }
 
-    private func handleLogin() {
-        NidOAuth.shared.requestLogin { [weak self] result in
+    private func handleLogin(reauthenticate: Bool) {
+        let requestLogin: (@escaping NidOAuth.LoginResultCompletion) -> Void = reauthenticate
+            ? { NidOAuth.shared.reauthenticate(callback: $0) }
+            : { NidOAuth.shared.requestLogin(callback: $0) }
+        requestLogin { [weak self] result in
             switch result {
             case .success(let loginResult):
                 let tokenInfo: [String: Any] = [

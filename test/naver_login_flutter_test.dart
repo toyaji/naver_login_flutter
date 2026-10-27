@@ -6,12 +6,16 @@ import 'package:naver_login_flutter/interface/types/naver_token.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:naver_login_flutter/interface/types/naver_login_status.dart';
 import 'package:naver_login_flutter/naver_login_flutter_method_channel.dart';
+import 'package:naver_login_flutter/naver_login_flutter.dart'
+    show FlutterNaverLogin;
 
 const String _fixedExpireTime = '2026-06-18T14:50:15.608932';
 
 class MockFlutterNaverLoginPlatform
     with MockPlatformInterfaceMixin
     implements FlutterNaverLoginPlatform {
+  bool? lastReauthenticate;
+
   Future<void> initSdk({
     required String clientId,
     required String clientName,
@@ -31,7 +35,8 @@ class MockFlutterNaverLoginPlatform
   }
 
   @override
-  Future<NaverLoginResult> logIn() async {
+  Future<NaverLoginResult> logIn({bool reauthenticate = false}) async {
+    lastReauthenticate = reauthenticate;
     return NaverLoginResult(
       status: NaverLoginStatus.loggedIn,
       accessToken: NaverToken(
@@ -96,6 +101,18 @@ void main() {
     final result = await fakePlatform.logIn();
     expect(result.status, NaverLoginStatus.loggedIn);
     expect(result.accessToken?.accessToken, 'mockAccessToken');
+  });
+
+  test('logIn forwards reauthenticate to the platform', () async {
+    MockFlutterNaverLoginPlatform fakePlatform =
+        MockFlutterNaverLoginPlatform();
+    FlutterNaverLoginPlatform.instance = fakePlatform;
+
+    await FlutterNaverLogin.logIn();
+    expect(fakePlatform.lastReauthenticate, isFalse);
+
+    await FlutterNaverLogin.logIn(reauthenticate: true);
+    expect(fakePlatform.lastReauthenticate, isTrue);
   });
 
   test('currentAccessToken', () async {

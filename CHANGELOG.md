@@ -1,3 +1,9 @@
+## 4.1.0
+* **로그인 시 재인증 요청 옵션 추가**: `FlutterNaverLogin.logIn(reauthenticate: true)`로 네이버 재인증(`auth_type=reauthenticate`)을 요청할 수 있습니다. 웹 로그인은 기기 브라우저(Safari / Chrome)의 네이버 세션을 공유하므로, 기본 동작으로는 브라우저에 로그인된 계정으로 로그인 화면 없이 완료되어 다른 계정으로 로그인할 수 없었습니다. 기본값은 `false`로, 기존 동작은 바뀌지 않습니다. ([#24](https://github.com/toyaji/naver_login_flutter/issues/24))
+  * iOS: `NidOAuth.shared.reauthenticate`를 호출합니다.
+  * Android: `requestLogin` 직전에 `NidOAuth.isRequiredCustomTabsReAuth`를 설정합니다. SDK 전역 상태라 매 호출마다 덮어씁니다. Custom Tabs 로그인에만 적용됩니다.
+  * 플랫폼 인터페이스(`FlutterNaverLoginPlatform`)를 직접 구현한 테스트 코드는 `logIn({bool reauthenticate = false})`로 시그니처를 맞춰야 합니다.
+
 ## 4.0.0
 * **[BREAKING] 최소 iOS 버전 13 → 15**: 네이버 iOS SDK를 `5.2.x`로 올리면서 최소 지원 iOS가 15.0으로 상승합니다. iOS 13/14 기기는 더 이상 지원되지 않으며, 앱의 `IPHONEOS_DEPLOYMENT_TARGET`도 15.0 이상이어야 합니다.
   * `Package.swift` / `podspec`의 플랫폼 선언을 `.iOS(.v15)` / `'15.0'`으로, 네이버 SDK 제약을 `~> 5.2.0`으로 변경했습니다.

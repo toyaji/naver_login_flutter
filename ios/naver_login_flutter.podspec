@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'naver_login_flutter'
-  s.version          = '4.0.0'
+  s.version          = '4.1.0'
   s.summary          = 'A Flutter plugin for using the native Naver Login SDKs on Android and iOS.'
   s.description      = <<-DESC
 A Flutter plugin for using the native Naver Login SDKs on Android and iOS.

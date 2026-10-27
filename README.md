@@ -169,6 +169,12 @@ try {
 }
 ```
 
+Web login shares the Naver session with the device browser (Safari / Chrome), so by default `logIn()` completes with the account already signed in there, without showing the login form. Pass `reauthenticate: true` to show the login form again and let the user sign in with a different account:
+
+```dart
+final NaverLoginResult res = await FlutterNaverLogin.logIn(reauthenticate: true);
+```
+
 #### Get Current Access Token
 ```dart
 try {

@@ -70,10 +70,19 @@ void main() {
 
   test('logIn', () async {
     final result = await platform.logIn();
-    expect(log, <Matcher>[isMethodCall('logIn', arguments: null)]);
+    expect(log, <Matcher>[
+      isMethodCall('logIn', arguments: {'reauthenticate': false}),
+    ]);
     expect(result.status, NaverLoginStatus.loggedIn);
     expect(result.accessToken?.accessToken, 'dummy_access_token');
     expect(result.account?.id, 'user123');
+  });
+
+  test('logIn with reauthenticate', () async {
+    await platform.logIn(reauthenticate: true);
+    expect(log, <Matcher>[
+      isMethodCall('logIn', arguments: {'reauthenticate': true}),
+    ]);
   });
 
   test('logOut', () async {

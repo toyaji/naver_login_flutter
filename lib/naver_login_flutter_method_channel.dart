@@ -21,9 +21,11 @@ class MethodChannelFlutterNaverLogin extends FlutterNaverLoginPlatform {
 
   /// 네이버 로그인을 수행하는 메서드
   @override
-  Future<NaverLoginResult> logIn() async {
+  Future<NaverLoginResult> logIn({bool reauthenticate = false}) async {
     try {
-      final raw = await methodChannel.invokeMethod('logIn');
+      final raw = await methodChannel.invokeMethod('logIn', {
+        'reauthenticate': reauthenticate,
+      });
       final result = Map<String, dynamic>.from(raw);
       return NaverLoginResult.fromMap(result);
     } on PlatformException catch (e) {

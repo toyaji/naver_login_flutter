@@ -5,6 +5,7 @@
         <activity 
             android:name="com.navercorp.nid.oauth.activity.NidOAuthCustomTabActivity"
             android:screenOrientation="unspecified"
-            tools:replace="android:screenOrientation" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
+            tools:replace="android:screenOrientation,android:theme" />
     </application>
 </manifest>

@@ -35,7 +35,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  naver_login_flutter: ^3.0.5
+  naver_login_flutter: ^4.1.1
 ```
 
 ### 2. Configure Native Projects (Recommended)
@@ -68,7 +68,7 @@ Remove the old package and add the new one:
 ```yaml
 dependencies:
   # Remove: flutter_naver_login: ^2.x.x
-  naver_login_flutter: ^3.0.0
+  naver_login_flutter: ^4.1.1
 ```
 
 #### 2. Update Dart Imports

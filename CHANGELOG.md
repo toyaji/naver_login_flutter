@@ -1,3 +1,6 @@
+## 미출시
+* **Android 네이버 로그인 취소 시 회색 화면 수정**: `NidOAuthCustomTabActivity`에 네이버 SDK의 투명 테마를 적용합니다. 앱 매니페스트의 별도 테마 오버라이드 없이 Custom Tab 취소 후 앱 화면으로 복귀합니다.
+
 ## 4.1.0
 * **로그인 시 재인증 요청 옵션 추가**: `FlutterNaverLogin.logIn(reauthenticate: true)`로 네이버 재인증(`auth_type=reauthenticate`)을 요청할 수 있습니다. 웹 로그인은 기기 브라우저(Safari / Chrome)의 네이버 세션을 공유하므로, 기본 동작으로는 브라우저에 로그인된 계정으로 로그인 화면 없이 완료되어 다른 계정으로 로그인할 수 없었습니다. 기본값은 `false`로, 기존 동작은 바뀌지 않습니다. ([#24](https://github.com/toyaji/naver_login_flutter/issues/24))
   * iOS: `NidOAuth.shared.reauthenticate`를 호출합니다.

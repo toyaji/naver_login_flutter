@@ -1,3 +1,6 @@
+## 4.1.2
+* **`xml` 7 지원**: `xml` 제약을 `^6.0.0` → `^7.0.0`으로 올렸습니다. `aws_client` 0.8 이상 등 `xml` 7을 요구하는 패키지와 함께 설치할 수 없던 문제를 해결합니다. 설정 CLI의 `XmlName(...)`을 `XmlName.parts(...)`로 바꿨습니다. 런타임 동작 변경은 없습니다.
+
 ## 4.1.1
 * **Android 네이버 로그인 취소 시 회색 화면 수정**: `NidOAuthCustomTabActivity`에 네이버 SDK의 투명 테마를 적용합니다. 앱 매니페스트의 별도 테마 오버라이드 없이 Custom Tab 취소 후 앱 화면으로 복귀합니다. ([#27](https://github.com/toyaji/naver_login_flutter/issues/27))
 

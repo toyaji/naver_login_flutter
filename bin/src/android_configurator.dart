@@ -188,29 +188,29 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
 
       // Add new meta-data elements
       final newElements = [
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientId',
           ),
-          XmlAttribute(XmlName('value', 'android'), clientId),
+          XmlAttribute(XmlName.parts('value', prefix: 'android'), clientId),
         ]),
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientSecret',
           ),
           XmlAttribute(
-            XmlName('value', 'android'),
+            XmlName.parts('value', prefix: 'android'),
             '@string/client_secret',
           ),
         ]),
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientName',
           ),
-          XmlAttribute(XmlName('value', 'android'), appName),
+          XmlAttribute(XmlName.parts('value', prefix: 'android'), appName),
         ]),
       ];
 

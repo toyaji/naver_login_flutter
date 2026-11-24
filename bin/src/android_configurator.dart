@@ -98,6 +98,19 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
       );
     }
 
+    // AGP 9 turns resValue off by default; the secret above is injected through it.
+    if (!RegExp(r'resValues\s*(=\s*)?true').hasMatch(gradleContent)) {
+      final buildFeaturesSnippet =
+          isKts
+              ? '\n    buildFeatures {\n        resValues = true\n    }\n'
+              : '\n    buildFeatures {\n        resValues true\n    }\n';
+
+      gradleContent = gradleContent.replaceFirst(
+        RegExp(r'^android\s*\{', multiLine: true),
+        'android {$buildFeaturesSnippet',
+      );
+    }
+
     targetGradle.writeAsStringSync(gradleContent);
     stdout.writeln('  [OK] Updated \${targetGradle.path}');
   } else {

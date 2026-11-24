@@ -100,6 +100,31 @@ android {
           ).readAsStringSync();
       expect(manifest, contains('android:value="test_client_id"'));
       expect(manifest, contains('android:value="@string/client_secret"'));
+
+      final gradle =
+          File(
+            path.join(tempDir.path, 'android', 'app', 'build.gradle.kts'),
+          ).readAsStringSync();
+      expect(gradle, contains('resValue("string", "client_secret"'));
+      expect(gradle, contains('resValues = true'));
+    });
+
+    test('Android Configurator does not duplicate resValues flag', () async {
+      for (var i = 0; i < 2; i++) {
+        await configureAndroid(
+          appName: 'TestApp',
+          clientId: 'test_client_id',
+          clientSecret: 'test_client_secret',
+          projectDir: tempDir.path,
+          askUser: (_) async => true,
+        );
+      }
+
+      final gradle =
+          File(
+            path.join(tempDir.path, 'android', 'app', 'build.gradle.kts'),
+          ).readAsStringSync();
+      expect('resValues = true'.allMatches(gradle).length, 1);
     });
 
     test('Android Configurator respects user skipping overwrite', () async {
@@ -193,12 +218,13 @@ android {
       expect(plist, contains('<string>mynaverscheme</string>'));
     });
 
-    test('iOS Configurator does not duplicate an already registered URL scheme',
-        () async {
-      final plistFile = File(
-        path.join(tempDir.path, 'ios', 'Runner', 'Info.plist'),
-      );
-      plistFile.writeAsStringSync('''
+    test(
+      'iOS Configurator does not duplicate an already registered URL scheme',
+      () async {
+        final plistFile = File(
+          path.join(tempDir.path, 'ios', 'Runner', 'Info.plist'),
+        );
+        plistFile.writeAsStringSync('''
 <plist version="1.0">
 <dict>
 	<key>CFBundleURLTypes</key>
@@ -214,24 +240,22 @@ android {
 </plist>
 ''');
 
-      final success = await configureIOS(
-        appName: 'TestApp',
-        clientId: 'test_id',
-        clientSecret: 'test_client_secret',
-        urlScheme: 'mynaverscheme',
-        projectDir: tempDir.path,
-      );
+        final success = await configureIOS(
+          appName: 'TestApp',
+          clientId: 'test_id',
+          clientSecret: 'test_client_secret',
+          urlScheme: 'mynaverscheme',
+          projectDir: tempDir.path,
+        );
 
-      expect(success, isTrue);
-      final plist = plistFile.readAsStringSync();
-      // The scheme should appear exactly twice: once as the NidUrlScheme value
-      // and once inside the pre-existing CFBundleURLSchemes array (not added a
-      // second time).
-      expect(
-        '<string>mynaverscheme</string>'.allMatches(plist).length,
-        2,
-      );
-    });
+        expect(success, isTrue);
+        final plist = plistFile.readAsStringSync();
+        // The scheme should appear exactly twice: once as the NidUrlScheme value
+        // and once inside the pre-existing CFBundleURLSchemes array (not added a
+        // second time).
+        expect('<string>mynaverscheme</string>'.allMatches(plist).length, 2);
+      },
+    );
 
     test('iOS Configurator gracefully handles weirdly formatted XML', () async {
       final plistFile = File(

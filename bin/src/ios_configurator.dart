@@ -175,9 +175,7 @@ Future<bool> configureIOS({
         rootDict.children.add(XmlText('\n\t'));
         final arrayNode = XmlElement(XmlName.parts('array'), [], [
           XmlText('\n\t\t'),
-          XmlElement(XmlName.parts('string'), [], [
-            XmlText('naversearchapp'),
-          ]),
+          XmlElement(XmlName.parts('string'), [], [XmlText('naversearchapp')]),
           XmlText('\n\t\t'),
           XmlElement(XmlName.parts('string'), [], [
             XmlText('naversearchthirdlogin'),
@@ -223,8 +221,7 @@ Future<bool> configureIOS({
               .whereType<XmlElement>()
               .where(
                 (e) =>
-                    e.name.local == 'key' &&
-                    e.innerText == 'CFBundleURLTypes',
+                    e.name.local == 'key' && e.innerText == 'CFBundleURLTypes',
               )
               .firstOrNull;
 
@@ -247,9 +244,7 @@ Future<bool> configureIOS({
                 XmlText('\n\t\t\t'),
                 XmlElement(XmlName.parts('array'), [], [
                   XmlText('\n\t\t\t\t'),
-                  XmlElement(XmlName.parts('string'), [], [
-                    XmlText(urlScheme),
-                  ]),
+                  XmlElement(XmlName.parts('string'), [], [XmlText(urlScheme)]),
                   XmlText('\n\t\t\t'),
                 ]),
                 XmlText('\n\t\t'),
@@ -261,9 +256,7 @@ Future<bool> configureIOS({
       } else {
         rootDict.children.add(XmlText('\t'));
         rootDict.children.add(
-          XmlElement(XmlName.parts('key'), [], [
-            XmlText('CFBundleURLTypes'),
-          ]),
+          XmlElement(XmlName.parts('key'), [], [XmlText('CFBundleURLTypes')]),
         );
         rootDict.children.add(XmlText('\n\t'));
         rootDict.children.add(
@@ -277,9 +270,7 @@ Future<bool> configureIOS({
               XmlText('\n\t\t\t'),
               XmlElement(XmlName.parts('array'), [], [
                 XmlText('\n\t\t\t\t'),
-                XmlElement(XmlName.parts('string'), [], [
-                  XmlText(urlScheme),
-                ]),
+                XmlElement(XmlName.parts('string'), [], [XmlText(urlScheme)]),
                 XmlText('\n\t\t\t'),
               ]),
               XmlText('\n\t\t'),

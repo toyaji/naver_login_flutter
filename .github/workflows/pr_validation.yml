@@ -78,7 +78,8 @@ jobs:
           flutter-version: "3.44.1"
 
       - name: Install dependencies
-        run: flutter pub get
+        # The example targets the latest Flutter (material_ui), so only the plugin is resolved here.
+        run: flutter pub get --no-example
 
       - name: Analyze
         run: flutter analyze lib test bin

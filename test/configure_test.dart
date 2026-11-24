@@ -127,6 +127,73 @@ android {
       expect('resValues = true'.allMatches(gradle).length, 1);
     });
 
+    Future<String> configureGradle(String fileName, String content) async {
+      final appDir = path.join(tempDir.path, 'android', 'app');
+      File(path.join(appDir, 'build.gradle.kts')).deleteSync();
+      final file = File(path.join(appDir, fileName))
+        ..writeAsStringSync(content);
+      for (var i = 0; i < 2; i++) {
+        await configureAndroid(
+          appName: 'TestApp',
+          clientId: 'test_client_id',
+          clientSecret: 'test_client_secret',
+          projectDir: tempDir.path,
+          askUser: (_) async => true,
+        );
+      }
+      return file.readAsStringSync();
+    }
+
+    test('Android Configurator configures Groovy build.gradle once', () async {
+      final gradle = await configureGradle('build.gradle', '''
+android {
+    defaultConfig {
+        applicationId "com.example.test"
+    }
+}
+''');
+
+      expect('resValue "string", "client_secret"'.allMatches(gradle).length, 1);
+      expect('resValues true'.allMatches(gradle).length, 1);
+    });
+
+    test('Android Configurator turns on resValues the app disabled', () async {
+      final gradle = await configureGradle('build.gradle.kts', '''
+android {
+    defaultConfig {
+        applicationId = "com.example.test"
+    }
+    buildFeatures {
+        resValues = false
+    }
+}
+''');
+
+      expect(gradle, isNot(contains('resValues = false')));
+      expect('resValues = true'.allMatches(gradle).length, 1);
+    });
+
+    test(
+      'Android Configurator reports failure without android block',
+      () async {
+        final appDir = path.join(tempDir.path, 'android', 'app');
+        File(path.join(appDir, 'build.gradle.kts')).writeAsStringSync('''
+plugins {
+    id("com.android.application")
+}
+''');
+
+        final success = await configureAndroid(
+          appName: 'TestApp',
+          clientId: 'test_client_id',
+          clientSecret: 'test_client_secret',
+          projectDir: tempDir.path,
+        );
+
+        expect(success, isFalse);
+      },
+    );
+
     test('Android Configurator respects user skipping overwrite', () async {
       // Inject dummy first
       final manifestFile = File(

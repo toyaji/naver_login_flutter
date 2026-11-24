@@ -86,7 +86,9 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
     }
 
     // Insert resValue into defaultConfig
-    if (!gradleContent.contains('resValue("string", "client_secret"')) {
+    if (!RegExp(
+      r'resValue\s*\(?\s*"string"\s*,\s*"client_secret"',
+    ).hasMatch(gradleContent)) {
       final resValueSnippet =
           isKts
               ? '\n        resValue("string", "client_secret", naverClientSecret.toString())'
@@ -99,20 +101,35 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
     }
 
     // AGP 9 turns resValue off by default; the secret above is injected through it.
-    if (!RegExp(r'resValues\s*(=\s*)?true').hasMatch(gradleContent)) {
-      final buildFeaturesSnippet =
-          isKts
-              ? '\n    buildFeatures {\n        resValues = true\n    }\n'
-              : '\n    buildFeatures {\n        resValues true\n    }\n';
-
-      gradleContent = gradleContent.replaceFirst(
-        RegExp(r'^android\s*\{', multiLine: true),
-        'android {$buildFeaturesSnippet',
+    final resValuesOff = RegExp(r'resValues\s*(=\s*)?false');
+    final androidBlock = RegExp(r'^android\s*\{', multiLine: true);
+    if (resValuesOff.hasMatch(gradleContent)) {
+      gradleContent = gradleContent.replaceAll(
+        resValuesOff,
+        isKts ? 'resValues = true' : 'resValues true',
       );
+    } else if (!RegExp(r'resValues\s*(=\s*)?true').hasMatch(gradleContent)) {
+      if (androidBlock.hasMatch(gradleContent)) {
+        final buildFeaturesSnippet =
+            isKts
+                ? '\n    buildFeatures {\n        resValues = true\n    }\n'
+                : '\n    buildFeatures {\n        resValues true\n    }\n';
+        gradleContent = gradleContent.replaceFirst(
+          androidBlock,
+          'android {$buildFeaturesSnippet',
+        );
+      } else {
+        stdout.writeln(
+          '  [WARN] Top-level android { } block not found. Add buildFeatures { resValues = true } manually (required on AGP 9+).',
+        );
+        success = false;
+      }
     }
 
     targetGradle.writeAsStringSync(gradleContent);
-    stdout.writeln('  [OK] Updated \${targetGradle.path}');
+    stdout.writeln(
+      '  [OK] Updated ${path.relative(targetGradle.path, from: projectDir)}',
+    );
   } else {
     stdout.writeln(
       '  [WARN] android/app/build.gradle(.kts) not found. Skipping gradle configuration.',

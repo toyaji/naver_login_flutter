@@ -63,6 +63,29 @@ jobs:
       - name: Test
         run: flutter test
 
+  min_flutter_check:
+    # Keep in sync with environment.flutter in pubspec.yaml.
+    name: Lint & Test (minimum Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: "3.44.1"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze lib test bin
+
+      - name: Test
+        run: flutter test
+
   android_build:
     name: Android Build Check
     runs-on: ubuntu-latest

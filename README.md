@@ -1,6 +1,6 @@
 # naver_login_flutter
 [![pub package](https://img.shields.io/pub/v/naver_login_flutter.svg)](https://pub.dev/packages/naver_login_flutter)
-[![Build Status](https://img.shields.io/badge/naverAosSDK-v5.11.2-success.svg)](https://github.com/naver/naveridlogin-sdk-android)
+[![Build Status](https://img.shields.io/badge/naverAosSDK-v5.12.0-success.svg)](https://github.com/naver/naveridlogin-sdk-android)
 [![Build Status](https://img.shields.io/badge/naverIosSDK-v5.2.1-success.svg)](https://github.com/naver/naveridlogin-sdk-ios-swift)
 [![Build Status](https://img.shields.io/badge/build-passing-success.svg)](https://github.com/toyaji/naver_login_flutter)
 
@@ -11,7 +11,7 @@ A Flutter plugin for using the native Naver Login SDKs on Android and iOS.
 - for [AndroidX Flutter projects](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility)
 
 ## Migration 
-- [Migrating from `flutter_naver_login` to `naver_login_flutter` 3.x](#migrating-from-flutter_naver_login-to-naver_login_flutter-3x)
+- [Migrating from `flutter_naver_login` to `naver_login_flutter` 4.x](#migrating-from-flutter_naver_login-to-naver_login_flutter-4x)
 
 ## 📌 Fork Background & Purpose
 
@@ -28,6 +28,13 @@ This repository contains specialized documentation for developers and AI agents:
 - [AI_RULES.md](AI_RULES.md): Strict development rules, Xcode build cache safety guidelines, and self-verification flows for AI agents (Gemini, Claude, GPT, etc.).
 - [SPM_INTEGRATION_STANDARDS.md](doc/SPM_INTEGRATION_STANDARDS.md): Technical specifications of the Swift Package Manager (SPM) bridge architecture and clean-up guides.
 
+## Requirements
+
+| | Minimum |
+|---|---|
+| Flutter | 3.44.0 |
+| iOS | 15.0 |
+
 ## Installation
 
 ### 1. Add dependency
@@ -35,7 +42,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  naver_login_flutter: ^4.1.1
+  naver_login_flutter: ^4.1.2
 ```
 
 ### 2. Configure Native Projects (Recommended)
@@ -59,7 +66,7 @@ dart run naver_login_flutter:configure --app-name="Your App" --client-id="xxx" -
 
 ## Migration Guide
 
-### Migrating from `flutter_naver_login` to `naver_login_flutter` 3.x
+### Migrating from `flutter_naver_login` to `naver_login_flutter` 4.x
 
 Since this package is a fork that transitioned to **Swift Package Manager (SPM)** and separated from the original `flutter_naver_login`, you must perform the following steps to migrate:
 
@@ -68,7 +75,7 @@ Remove the old package and add the new one:
 ```yaml
 dependencies:
   # Remove: flutter_naver_login: ^2.x.x
-  naver_login_flutter: ^4.1.1
+  naver_login_flutter: ^4.1.2
 ```
 
 #### 2. Update Dart Imports
@@ -128,17 +135,17 @@ class NaverToken {
 #### NaverAccountResult
 ```dart
 class NaverAccountResult {
-  final String id;
-  final String nickname;
-  final String name;
-  final String email;
-  final String gender;
-  final String age;
-  final String birthday;
-  final String birthyear;
-  final String profileImage;
-  final String mobile;
-  final String mobileE164;
+  final String? id;
+  final String? nickname;
+  final String? name;
+  final String? email;
+  final String? gender;
+  final String? age;
+  final String? birthday;
+  final String? birthYear;
+  final String? profileImage;
+  final String? mobile;
+  final String? mobileE164;
 }
 ```
 
@@ -187,6 +194,21 @@ try {
   }
 } catch (error) {
   print('Failed to get token: $error');
+}
+```
+
+#### Check Login State
+```dart
+final bool loggedIn = await FlutterNaverLogin.isLoggedIn();
+```
+
+#### Refresh Access Token
+```dart
+try {
+  final NaverToken token = await FlutterNaverLogin.refreshAccessTokenWithRefreshToken();
+  print('New expires at: ${token.expiresAt}');
+} catch (error) {
+  print('Failed to refresh token: $error');
 }
 ```
 

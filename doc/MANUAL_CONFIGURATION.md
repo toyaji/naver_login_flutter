@@ -22,6 +22,9 @@ if (localPropertiesFile.exists()) {
 val naverClientSecret = localProperties.getProperty("naver.client_secret") ?: ""
 
 android {
+    buildFeatures {
+        resValues = true // required on AGP 9+, where resValue is off by default
+    }
     defaultConfig {
         resValue("string", "client_secret", naverClientSecret.toString())
     }

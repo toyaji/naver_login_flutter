@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:logger/logger.dart';
 import 'package:naver_login_flutter/naver_login_flutter.dart';
 
@@ -165,15 +165,19 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final NaverLoginResult res = await FlutterNaverLogin.logIn();
       logger.i('buttonLoginPressed: NaverLoginResult status: ${res.status}');
-      logger.i('buttonLoginPressed: NaverLoginResult errorMessage: ${res.errorMessage}');
-      
+      logger.i(
+        'buttonLoginPressed: NaverLoginResult errorMessage: ${res.errorMessage}',
+      );
+
       if (res.status == NaverLoginStatus.error) {
         _showToast('로그인 실패: ${res.errorMessage}', isError: true);
       } else if (res.status == NaverLoginStatus.loggedIn) {
         _showToast('로그인 성공');
       }
 
-      logger.i('buttonLoginPressed: login result has accessToken: ${res.accessToken != null}');
+      logger.i(
+        'buttonLoginPressed: login result has accessToken: ${res.accessToken != null}',
+      );
 
       setState(() {
         isLogin = res.status == NaverLoginStatus.loggedIn;
@@ -201,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // 보안: access token 원문은 로그에 남기지 않는다 (CI/크래시/공유 기기 로그 유출 방지)
 
       _showToast('토큰 정보 가져오기 성공');
-      
+
       setState(() {
         refreshToken = res.refreshToken;
         accessToken = res.accessToken;
@@ -219,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final NaverLoginResult res = await FlutterNaverLogin.logOut();
       logger.i('buttonLogoutPressed: NaverLoginResult status: ${res.status}');
-      
+
       if (res.status == NaverLoginStatus.error) {
         _showToast('로그아웃 실패: ${res.errorMessage}', isError: true);
       } else if (res.status == NaverLoginStatus.loggedOut) {
@@ -243,8 +247,10 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final NaverLoginResult res =
           await FlutterNaverLogin.logOutAndDeleteToken();
-      logger.i('buttonLogoutAndDeleteTokenPressed: NaverLoginResult status: ${res.status}');
-      
+      logger.i(
+        'buttonLogoutAndDeleteTokenPressed: NaverLoginResult status: ${res.status}',
+      );
+
       if (res.status == NaverLoginStatus.error) {
         _showToast('로그아웃 및 토큰 삭제 실패: ${res.errorMessage}', isError: true);
       } else if (res.status == NaverLoginStatus.loggedOut) {
@@ -269,9 +275,9 @@ class _MyHomePageState extends State<MyHomePage> {
       final NaverAccountResult res =
           await FlutterNaverLogin.getCurrentAccount();
       logger.i('buttonGetUserPressed: NaverAccountResult id: ${res.id}');
-      
+
       _showToast('사용자 정보 가져오기 성공');
-      
+
       setState(() => userInfo = res);
     } catch (error) {
       logger.e('buttonGetUserPressed: catch error: $error');

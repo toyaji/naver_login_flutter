@@ -86,7 +86,9 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
     }
 
     // Insert resValue into defaultConfig
-    if (!gradleContent.contains('resValue("string", "client_secret"')) {
+    if (!RegExp(
+      r'resValue\s*\(?\s*"string"\s*,\s*"client_secret"',
+    ).hasMatch(gradleContent)) {
       final resValueSnippet =
           isKts
               ? '\n        resValue("string", "client_secret", naverClientSecret.toString())'
@@ -98,8 +100,36 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
       );
     }
 
+    // AGP 9 turns resValue off by default; the secret above is injected through it.
+    final resValuesOff = RegExp(r'resValues\s*(=\s*)?false');
+    final androidBlock = RegExp(r'^android\s*\{', multiLine: true);
+    if (resValuesOff.hasMatch(gradleContent)) {
+      gradleContent = gradleContent.replaceAll(
+        resValuesOff,
+        isKts ? 'resValues = true' : 'resValues true',
+      );
+    } else if (!RegExp(r'resValues\s*(=\s*)?true').hasMatch(gradleContent)) {
+      if (androidBlock.hasMatch(gradleContent)) {
+        final buildFeaturesSnippet =
+            isKts
+                ? '\n    buildFeatures {\n        resValues = true\n    }\n'
+                : '\n    buildFeatures {\n        resValues true\n    }\n';
+        gradleContent = gradleContent.replaceFirst(
+          androidBlock,
+          'android {$buildFeaturesSnippet',
+        );
+      } else {
+        stdout.writeln(
+          '  [WARN] Top-level android { } block not found. Add buildFeatures { resValues = true } manually (required on AGP 9+).',
+        );
+        success = false;
+      }
+    }
+
     targetGradle.writeAsStringSync(gradleContent);
-    stdout.writeln('  [OK] Updated \${targetGradle.path}');
+    stdout.writeln(
+      '  [OK] Updated ${path.relative(targetGradle.path, from: projectDir)}',
+    );
   } else {
     stdout.writeln(
       '  [WARN] android/app/build.gradle(.kts) not found. Skipping gradle configuration.',
@@ -188,29 +218,29 @@ def naverClientSecret = localProperties.getProperty('naver.client_secret') ?: ""
 
       // Add new meta-data elements
       final newElements = [
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientId',
           ),
-          XmlAttribute(XmlName('value', 'android'), clientId),
+          XmlAttribute(XmlName.parts('value', prefix: 'android'), clientId),
         ]),
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientSecret',
           ),
           XmlAttribute(
-            XmlName('value', 'android'),
+            XmlName.parts('value', prefix: 'android'),
             '@string/client_secret',
           ),
         ]),
-        XmlElement(XmlName('meta-data'), [
+        XmlElement(XmlName.parts('meta-data'), [
           XmlAttribute(
-            XmlName('name', 'android'),
+            XmlName.parts('name', prefix: 'android'),
             'com.naver.sdk.clientName',
           ),
-          XmlAttribute(XmlName('value', 'android'), appName),
+          XmlAttribute(XmlName.parts('value', prefix: 'android'), appName),
         ]),
       ];
 

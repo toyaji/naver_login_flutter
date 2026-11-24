@@ -1,3 +1,9 @@
+## 4.1.2
+* **`xml` 7 지원**: `xml` 제약을 `^6.0.0` → `^7.0.0`으로 올렸습니다. `aws_client` 0.8 이상 등 `xml` 7을 요구하는 패키지와 함께 설치할 수 없던 문제를 해결합니다. 설정 CLI의 `XmlName(...)`을 `XmlName.parts(...)`로 바꿨습니다. 런타임 동작 변경은 없습니다.
+* **네이버 Android SDK 5.12.0**: `com.navercorp.nid:oauth`를 `5.11.2` → `5.12.0`으로 올렸습니다.
+* **설정 CLI AGP 9 대응**: AGP 9에서는 `resValue`가 기본으로 꺼져 있어 client secret 주입이 빌드 오류를 냅니다. `dart run naver_login_flutter:configure`가 앱의 `build.gradle(.kts)`에 `buildFeatures { resValues = true }`를 함께 넣습니다(AGP 8에도 무해합니다). 앱이 `resValues`를 꺼 두었으면 켜고, `android { }` 블록을 찾지 못하면 경고를 출력합니다.
+* **설정 CLI 수정**: Groovy `build.gradle`에서 다시 실행하면 `resValue` 줄이 중복으로 들어가던 문제와, 수정한 Gradle 파일 경로가 로그에 표시되지 않던 문제를 고쳤습니다.
+
 ## 4.1.1
 * **Android 네이버 로그인 취소 시 회색 화면 수정**: `NidOAuthCustomTabActivity`에 네이버 SDK의 투명 테마를 적용합니다. 앱 매니페스트의 별도 테마 오버라이드 없이 Custom Tab 취소 후 앱 화면으로 복귀합니다. ([#27](https://github.com/toyaji/naver_login_flutter/issues/27))
 
